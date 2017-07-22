@@ -1,0 +1,30 @@
+# python
+*.py[cod]
+*.swp
+
+.DS_Store
+.vscode/
+
+# build
+.gitconfig
+.installed.cfg
+.ropeproject/
+./apis/ropeproject/
+./apis/static/
+./__pycache__/
+./apis/__pycache__/
+.idea/
+bin/
+parts/
+eggs/
+build/
+dist/
+access.log*
+error.log*
+newrelic.ini
+
+local_settings.py
+
+# test
+test_example.py
+test_settings.py

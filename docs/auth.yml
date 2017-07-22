@@ -1,0 +1,412 @@
+swagger: '2.0'
+info:
+    title: Metis Auth API
+    version: '1.0.0'
+schemes:
+    - http
+basePath: /auth
+consumes:
+    - application/json
+produces:
+    - application/json
+definitions:
+    auth_approach:
+        properties:
+            auth_approach:
+                type: string
+                default: mobile
+                enum:
+                    - mobile
+                    - wxapp
+                    - weixin
+                    - weixin_mp
+                description: 登录方式 手机 微信 微信小程序
+    Authentication:
+        type: object
+        description: 获取token 登录 使用
+        required:
+            - username
+            - password
+        optional:
+            - grant_type
+            - auth_approach
+        allOf:
+            - $ref: '#/definitions/auth_approach'
+            - type: object
+        properties:
+            username:
+                type: string
+                description: 手机号//微信open_id/email
+            password:
+                type: string
+                description: 密码/微信token
+            grant_type:
+                type: string
+                default: password
+                enum: 
+                    - password
+                description: 认证类型 默认密码
+    TokenDetail:
+        description: 返回的token信息
+        required:
+            - account_id
+            - access_token
+            - refresh_token
+            - token_type
+            - expires_in
+            - scopes
+        properties:
+            account_id:
+                type: string
+                format: int32
+            access_token:
+                type: string
+            refresh_token:
+                type: string
+            token_type:
+                type: string
+                default: Bearer
+            expires_in:
+                type: integer
+                format: int32
+            scopes:
+                type: array
+                type: string
+                description: token 类型
+            is_new_weixin_app:
+                type: boolean
+    Token:
+        description: token
+        properties:
+            access_token:
+                type: string
+    RefreshToken:
+        required:
+            - refresh_token
+            - grant_type
+        properties:
+            refresh_token:
+                type: string
+            grant_type:
+                type: string
+                default: refresh_token
+                enum:
+                    - refresh_token
+    Account:
+        description: account 基本信息
+        required:
+            - id
+        properties:
+            id:
+                type: string
+            date_created:
+                format: datetime
+                type: string
+    CreateWXAPPAccount:
+        required:
+            - username
+            - password
+            - code
+        properties:
+            code:
+                type: string
+            username:
+                type: string
+            password:
+                type: string
+            auth_approach:
+                type: string
+                enum:
+                    - wxapp
+    OAuthBind:
+        description: 绑定登录后绑定第三方帐号
+        required:
+            - auth_approach
+            - identity
+            - password
+        properties:
+            auth_approach:
+                type: string
+                default: mobile
+                enum: 
+                    - weibo
+                    - weixin
+                    - wxapp
+                description: 绑定第三方帐号 微信 微信公众号 微信小程序
+            password:
+                type: string
+                description: 微博token/微信token
+            identity:
+                type: string
+                description: weibo/weixin uid
+    Password:
+        required:
+            - password
+        properties:
+            password:
+                maxLength: 128
+                minLength: 6
+                type: string
+    UpdatePassword:
+        properties:
+            new_password:
+                maxLength: 128
+                minLength: 6
+                type: string
+            password:
+                maxLength: 128
+                minLength: 6
+                type: string
+    ResetPassword:
+        properties:
+            mobile:
+                type: string
+            old_password:
+                maxLength: 128
+                minLength: 6
+                type: string
+            new_password:
+                maxLength: 128
+                minLength: 6
+                type: string
+    Approach:
+        required:
+            - approach
+        properties:
+            approach:
+                type: string
+            identity:
+                type: string
+            is_verified:
+                type: boolean
+    Scopes:
+        required:
+            - scopes
+        properties:
+            scopes:
+                type: array
+                items:
+                    type: string
+                description: token 类型
+    Error:
+        properties:
+            error_code:
+                type: integer
+                format: int32
+            message:
+                type: string
+            text:
+                type: string
+    Success:
+        properties:
+            ok:
+                type: boolean
+    None:
+        type: object
+parameters:
+    AccessToken:
+        name: Authorization
+        in: header
+        required: true
+        type: string
+    Authorization:
+        description: 格式 (Basic hashkey) 注 hashkey为client_id + client_secret 做BASE64处理
+        in: header
+        name: Authorization
+        required: true
+        type: string
+securityDefinitions:
+    OAuth2:
+        type: oauth2
+        flow: password
+        tokenUrl: https://apis-metis.gusibi.mobi/oauth/token
+        scopes:
+            register: 用户注册
+            open: 开放API
+paths:
+    /oauth/token:
+        post:
+            summary: 使用账号换取token
+            description: |
+                账号可以包括微博、微信、Email、手机等多种方式.
+                如果使用没有注册过的微博或微信来获取token, 则返回token的 scopes 为 ['register'], 以此表明需要先注册一个用户.
+            tags: [OAUTH]
+            operationId: oauth_create_token
+            parameters:
+                - $ref: '#/parameters/Authorization'
+                - name: oauth
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Authentication'
+            responses:
+                201:
+                    description: access token
+                    schema:
+                        $ref: '#/definitions/TokenDetail'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [login, register]
+    /oauth/token/refresh:
+        post:
+            summary: 通过 refresh token  获取新token
+            tags: [OAUTH]
+            parameters:
+                - $ref: '#/parameters/Authorization'
+                - name: refresh_token
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/RefreshToken'
+            responses:
+                200:
+                    description: access token
+                    schema:
+                        $ref: '#/definitions/TokenDetail'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [login]
+    /oauth/token/info:
+        post:
+            summary: 检查 token 信息
+            tags: [OAUTH]
+            parameters:
+                - $ref: '#/parameters/Authorization'
+                - name: access_token
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Token'
+            responses:
+                200:
+                    description: access token
+                    schema:
+                        $ref: '#/definitions/TokenDetail'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [login]
+    /oauth/bind:
+        post:
+            summary: 登录后绑定第三方帐号
+            description: 登录后绑定第三方帐号 支持微博 微信 百度
+            tags: [OAUTH]
+            operationId: oauth_bind
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - name: auth_bind
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/OAuthBind'
+            responses:
+                201:
+                    description: 用户完整信息
+                    schema:
+                        $ref: '#/definitions/Success'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+    /accounts/wxapp:
+        post:
+            summary: 微信小程序注册
+            description: 微信小程序注册
+            tags: [ACCOUNTS]
+            operationId: create_accounts_by_wxapp
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - name: create_accounts_by_wxapp
+                  in: body
+                  required: ture
+                  schema:
+                      $ref: '#/definitions/CreateWXAPPAccount'
+            responses:
+                201:
+                    description: 帐号信息
+                    schema:
+                        $ref: '#/definitions/Account'
+                default:
+                    description: Unexpected Error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [login]
+    /self/password:
+        post:
+            summary: 设置密码
+            description: 设置密码
+            tags: [ACCOUNTS]
+            operationId: set_password
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - name: setting_password
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Password'
+            responses:
+                201:
+                    schema:
+                        $ref: '#/definitions/Success'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+        put:
+            summary: 密码修改
+            description: 密码修改
+            tags: [ACCOUNTS]
+            operationId: update_password
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - name: update_password
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/UpdatePassword'
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/Success'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+    /self/password/reset:
+        post:
+            summary: 密码重置
+            description: 密码重置
+            tags: [ACCOUNTS]
+            operationId: reset_password
+            parameters:
+                - $ref: '#/parameters/Authorization'
+                - name: reset_password
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/ResetPassword'
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/Success'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [login]
