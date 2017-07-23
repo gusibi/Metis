@@ -6,7 +6,12 @@ from pymongo import MongoClient
 from pymongo import ReturnDocument
 from apis.settings import Config
 
+
 pyclient = MongoClient(Config.MONGO_MASTER_URL)
+
+
+class APIModel(object):
+    pass
 
 
 class ModelMetaclass(type):
@@ -17,7 +22,7 @@ class ModelMetaclass(type):
 
     def __init__(cls, name, bases, attrs):
         super(ModelMetaclass, cls).__init__(name, bases, attrs)
-        cls.db = pyclient['momo_bill']
+        cls.db = pyclient[Config.MONGO_DATABASE]
         if cls.__collection__:
             cls.collection = cls.db[cls.__collection__]
 

@@ -2,6 +2,9 @@
 
 from sanic.response import text
 
+from apis.verification import verify_request
+from apis.models.oauth import Account
+
 from . import Resource
 from .. import schemas
 
@@ -9,7 +12,6 @@ from .. import schemas
 class OauthToken(Resource):
 
     async def post(self, request):
-        print(request.json)
-        print(request.headers)
-
-        return {'account_id': 'something', 'access_token': 'something', 'refresh_token': 'something', 'token_type': 'Bearer', 'expires_in': 9573, 'scopes': 'something'}, 201, None
+        token = verify_request(request)
+        print(token)
+        return token

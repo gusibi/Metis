@@ -29,8 +29,6 @@ app = create_app()
 
 @app.exception(NotFound)
 def not_found(request, exception):
-    print(exception)
-    print(exception.args)
     return json({'error_code': 'not_found',
                  'message': exception.args[0]},
                 status=exception.status_code,

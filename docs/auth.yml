@@ -51,30 +51,16 @@ definitions:
         required:
             - account_id
             - access_token
-            - refresh_token
             - token_type
-            - expires_in
-            - scopes
         properties:
             account_id:
                 type: string
                 format: int32
             access_token:
                 type: string
-            refresh_token:
-                type: string
             token_type:
                 type: string
                 default: Bearer
-            expires_in:
-                type: integer
-                format: int32
-            scopes:
-                type: array
-                type: string
-                description: token 类型
-            is_new_weixin_app:
-                type: boolean
     Token:
         description: token
         properties:

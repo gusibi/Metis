@@ -7,6 +7,9 @@ from datetime import datetime
 from apis.models import Model
 
 
+__all__ = ['Account', 'OAuth2Client', 'OAuth2Token']
+
+
 class HasedPassword(object):
 
     HASH_LOG_ROUNDS = 4  # 值越大 hash 速度越慢，越安全，4 最小值
@@ -46,7 +49,7 @@ class Account(Model):
     :param created_time: 创建时间
     :param password: 密码
     :param authentications: 认证信息 {'wxapp': 'openid', 'mobile': 'mobile_num'}
-    :param status: 状态(active|发布|forbiden)
+    :param status: 状态(active|发布|forbidden)
     '''
 
     __collection__ = 'account'

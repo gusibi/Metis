@@ -12,21 +12,21 @@
 base_path = '/auth'
 
 
-DefinitionsCreatewxappaccount = {'required': ['username', 'password', 'code'], 'properties': {'code': {'type': 'string'}, 'username': {'type': 'string'}, 'password': {'type': 'string'}, 'auth_approach': {'type': 'string', 'enum': ['wxapp']}}}
-DefinitionsPassword = {'required': ['password'], 'properties': {'password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
-DefinitionsAuth_approach = {'properties': {'auth_approach': {'type': 'string', 'default': 'mobile', 'enum': ['mobile', 'wxapp', 'weixin', 'weixin_mp'], 'description': '登录方式 手机 微信 微信小程序'}}}
-DefinitionsError = {'properties': {'error_code': {'type': 'integer', 'format': 'int32'}, 'message': {'type': 'string'}, 'text': {'type': 'string'}}}
-DefinitionsOauthbind = {'description': '绑定登录后绑定第三方帐号', 'required': ['auth_approach', 'identity', 'password'], 'properties': {'auth_approach': {'type': 'string', 'default': 'mobile', 'enum': ['weibo', 'weixin', 'wxapp'], 'description': '绑定第三方帐号 微信 微信公众号 微信小程序'}, 'password': {'type': 'string', 'description': '微博token/微信token'}, 'identity': {'type': 'string', 'description': 'weibo/weixin uid'}}}
-DefinitionsUpdatepassword = {'properties': {'new_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}, 'password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
-DefinitionsResetpassword = {'properties': {'mobile': {'type': 'string'}, 'old_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}, 'new_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
-DefinitionsAccount = {'description': 'account 基本信息', 'required': ['id'], 'properties': {'id': {'type': 'string'}, 'date_created': {'format': 'datetime', 'type': 'string'}}}
-DefinitionsScopes = {'required': ['scopes'], 'properties': {'scopes': {'type': 'array', 'items': {'type': 'string'}, 'description': 'token 类型'}}}
-DefinitionsNone = {'type': 'object'}
 DefinitionsToken = {'description': 'token', 'properties': {'access_token': {'type': 'string'}}}
+DefinitionsTokendetail = {'description': '返回的token信息', 'required': ['account_id', 'access_token', 'token_type'], 'properties': {'account_id': {'type': 'string', 'format': 'int32'}, 'access_token': {'type': 'string'}, 'token_type': {'type': 'string', 'default': 'Bearer'}}}
+DefinitionsPassword = {'required': ['password'], 'properties': {'password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
 DefinitionsApproach = {'required': ['approach'], 'properties': {'approach': {'type': 'string'}, 'identity': {'type': 'string'}, 'is_verified': {'type': 'boolean'}}}
-DefinitionsTokendetail = {'description': '返回的token信息', 'required': ['account_id', 'access_token', 'refresh_token', 'token_type', 'expires_in', 'scopes'], 'properties': {'account_id': {'type': 'string', 'format': 'int32'}, 'access_token': {'type': 'string'}, 'refresh_token': {'type': 'string'}, 'token_type': {'type': 'string', 'default': 'Bearer'}, 'expires_in': {'type': 'integer', 'format': 'int32'}, 'scopes': {'type': 'string', 'description': 'token 类型'}, 'is_new_weixin_app': {'type': 'boolean'}}}
+DefinitionsOauthbind = {'description': '绑定登录后绑定第三方帐号', 'required': ['auth_approach', 'identity', 'password'], 'properties': {'auth_approach': {'type': 'string', 'default': 'mobile', 'enum': ['weibo', 'weixin', 'wxapp'], 'description': '绑定第三方帐号 微信 微信公众号 微信小程序'}, 'password': {'type': 'string', 'description': '微博token/微信token'}, 'identity': {'type': 'string', 'description': 'weibo/weixin uid'}}}
+DefinitionsError = {'properties': {'error_code': {'type': 'integer', 'format': 'int32'}, 'message': {'type': 'string'}, 'text': {'type': 'string'}}}
+DefinitionsNone = {'type': 'object'}
+DefinitionsAuth_approach = {'properties': {'auth_approach': {'type': 'string', 'default': 'mobile', 'enum': ['mobile', 'wxapp', 'weixin', 'weixin_mp'], 'description': '登录方式 手机 微信 微信小程序'}}}
+DefinitionsCreatewxappaccount = {'required': ['username', 'password', 'code'], 'properties': {'code': {'type': 'string'}, 'username': {'type': 'string'}, 'password': {'type': 'string'}, 'auth_approach': {'type': 'string', 'enum': ['wxapp']}}}
+DefinitionsScopes = {'required': ['scopes'], 'properties': {'scopes': {'type': 'array', 'items': {'type': 'string'}, 'description': 'token 类型'}}}
+DefinitionsResetpassword = {'properties': {'mobile': {'type': 'string'}, 'old_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}, 'new_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
 DefinitionsRefreshtoken = {'required': ['refresh_token', 'grant_type'], 'properties': {'refresh_token': {'type': 'string'}, 'grant_type': {'type': 'string', 'default': 'refresh_token', 'enum': ['refresh_token']}}}
 DefinitionsSuccess = {'properties': {'ok': {'type': 'boolean'}}}
+DefinitionsAccount = {'description': 'account 基本信息', 'required': ['id'], 'properties': {'id': {'type': 'string'}, 'date_created': {'format': 'datetime', 'type': 'string'}}}
+DefinitionsUpdatepassword = {'properties': {'new_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}, 'password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
 DefinitionsAuthentication = {'type': 'object', 'description': '获取token 登录 使用', 'required': ['username', 'password'], 'optional': ['grant_type', 'auth_approach'], 'allOf': [DefinitionsAuth_approach, {'type': 'object'}], 'properties': {'username': {'type': 'string', 'description': '手机号//微信open_id/email'}, 'password': {'type': 'string', 'description': '密码/微信token'}, 'grant_type': {'type': 'string', 'default': 'password', 'enum': ['password'], 'description': '认证类型 默认密码'}}}
 
 validators = {

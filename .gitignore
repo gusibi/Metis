@@ -10,9 +10,9 @@
 .installed.cfg
 .ropeproject/
 ./apis/ropeproject/
-./apis/static/
 ./__pycache__/
 ./apis/__pycache__/
+apis/static/
 .idea/
 bin/
 parts/

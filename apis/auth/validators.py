@@ -167,7 +167,6 @@ def response_filter(view):
         status = None
         if isinstance(resp, tuple):
             resp, status, headers = unpack(resp)
-        print(resp, status, headers)
 
         if len(filter) == 1:
             if six.PY3:
@@ -188,7 +187,6 @@ def response_filter(view):
         if errors:
             raise ServerError('Expectation Failed', 500)
 
-        print(headers)
         return response.json(
             resp,
             status=status,
