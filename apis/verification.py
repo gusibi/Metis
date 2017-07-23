@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import base64
 import time
 import jwt
 
@@ -21,14 +22,14 @@ def verify_client(client_id, secret):
     pass
 
 
-def verify_request(reqeust):
-    authorization_type, token = get_authorization()
+def verify_request(request):
+    authorization_type, token = get_authorization(request)
     if authorization_type == 'Basic':
-        is_validate = verify_client(token)
+        is_validate = verify_basic_token(token)
         if not is_validate:
             return False, None
     elif authorization_type == 'Bearer':
-        return verify_token(token)
+        return verify_bearer_token(token)
     return False, None
 
 
@@ -63,14 +64,25 @@ def create_token(request):
          "iat": int(time.time()),
          "exp": int(time.time()) + 86400 * 7,
          "aud": "www.gusibi.com",
-         "sub": account['_id'],
+         "sub": str(account['_id']),
          "username": account['username'],
          "scopes": ['open']
     }
     print(payload)
     token = jwt.encode(payload, 'secret', algorithm='HS256')
-    return True, {'access_token': token, 'account_id': account['_id']}
+    return True, {'access_token': token, 'account_id': str(account['_id'])}
+
+def verify_basic_token(token):
+    try:
+         client = base64.b64decode(token)
+         client_id, secret = client.split(':')
+    except (TypeError, ValueError):
+         return False, None
+    return verify_client(client_id, secret)
 
 
-def verify_token(token):
-    pass
+def verify_bearer_token(token):
+    payload = jwt.decode(token, 'secret', audience='www.gusibi.com', algorithms=['HS256'])
+    if payload:
+        return True, token
+    return False, token

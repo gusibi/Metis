@@ -63,6 +63,14 @@ scopes = {
 }
 
 
+class Current(object):
+
+    request = None
+
+
+current = Current()
+
+
 class Security(object):
 
     def __init__(self):
@@ -71,7 +79,8 @@ class Security(object):
 
     @property
     def scopes(self):
-        return self._loader()
+        print(current.request)
+        return self._loader(current.request)
 
     def scopes_loader(self, func):
         self._loader = func

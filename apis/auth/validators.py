@@ -22,7 +22,7 @@ from sanic.request import RequestParameters
 from jsonschema import Draft4Validator
 
 from .schemas import (
-    validators, filters, scopes, security, base_path, normalize)
+    validators, filters, scopes, security, base_path, normalize, current)
 
 
 def unpack(value):
@@ -121,6 +121,7 @@ def request_validate(view):
         request = args[1]
         endpoint = _path_to_endpoint(request.uri_template)
         # scope
+        current.request = request
         if (endpoint, request.method) in scopes and not set(
                 scopes[(endpoint, request.method)]).issubset(set(security.scopes)):
             raise ServerError('403', status_code=403)

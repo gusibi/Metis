@@ -9,9 +9,6 @@ from .. import schemas
 class SelfPassword(Resource):
 
     async def post(self, request):
-        print(request.json)
-        print(request.headers)
-
         return {}, 201, None
 
     async def put(self, request):
