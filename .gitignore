@@ -13,7 +13,6 @@
 ./__pycache__/
 ./apis/__pycache__/
 apis/static/
-wxapp/config.js
 .idea/
 bin/
 parts/
@@ -24,7 +23,8 @@ access.log*
 error.log*
 newrelic.ini
 
-local_settings.py
+wxapp/local_config.js
+apis/local_settings.py
 
 # test
 test_example.py

@@ -1,6 +1,7 @@
-var host = 'https://metis.gusibi.mobi';
-// var host = 'http://127.0.0.1:8888';
-var basic_token = 'Basic token=';
+var config = require('./config.js')
+
+var host = config.host || 'https://metis.gusibi.mobi';
+var basic_token = config.basic_token || 'Basic token=';
 
 module.exports = {
     host: host,
