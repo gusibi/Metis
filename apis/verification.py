@@ -70,7 +70,7 @@ def verify_wxapp(encrypted_data, iv, code):
         auth = Account.get_by_wxapp(openid)
         if not auth:
             raise Unauthorized('wxapp_not_registered')
-        return True, auth
+        return auth
     raise Unauthorized('invalid_wxapp_code')
 
 

@@ -59,7 +59,8 @@ class Account(Model):
 
     @classmethod
     def get_by_wxapp(cls, openid):
-        account = cls.get({'authentications.openid': openid})
+        account = cls.get(**{'authentications.wxapp': openid})
+        return account
 
 
 class OAuth2Token(Model):

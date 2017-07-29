@@ -14,10 +14,10 @@ class AccountsWxapp(Resource):
 
     async def post(self, request):
         encrypted_data = request.json.get('username')
-        iv = request.json.get('iv')
+        iv = request.json.get('password')
         code = request.json.get('code')
         user_info = get_wxapp_userinfo(encrypted_data, iv, code)
-        openid = user_info.get('openid')
+        openid = user_info.get('openId')
         account = Account.get_by_wxapp(openid=openid)
         if account:
             raise BadRequest('wxapp_already_registered')
