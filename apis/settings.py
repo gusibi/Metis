@@ -20,9 +20,13 @@ class Config(object):
     API_DOMAIN = environ.get('API_DOMAIN', 'http://metis.gusibi.mobi')
     DOMAIN = '%s://%s' % (APP_TRANSPORT, urlparse(APP_DOMAIN).netloc)
 
+    # JWT
+    ISS = environ.get('ISS', 'iss')
+    AUDIENCE = environ.get('AUDIENCE', 'audience')
+
     # 微信 小程序账号信息
     WXAPP_ID = environ.get('WXAPP_ID', 'appid')
-    WXAPP_SECRET = environ.get('WXAPP_SECRET', '')
+    WXAPP_SECRET = environ.get('WXAPP_SECRET', 'secret')
     WXAPP_TOKEN = environ.get('WXAPP_TOKEN', 'token')
     WXAPP_ENCODINGAESKEY = environ.get('WXAPP_ENCODINGAESKEY', '')
 

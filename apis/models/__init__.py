@@ -37,6 +37,7 @@ class Model(with_metaclass(ModelMetaclass, object)):
 
     @classmethod
     def get(cls, _id=None, **kwargs):
+        print(kwargs)
         if _id:
             doc = cls.collection.find_one({'_id': _id})
         else:
@@ -53,7 +54,9 @@ class Model(with_metaclass(ModelMetaclass, object)):
 
     @classmethod
     def insert(cls, **kwargs):
-        doc = cls.collection.insert_one(kwargs)
+        params = getattr(cls, '__default_fields__', {})
+        params.update(kwargs)
+        doc = cls.collection.insert_one(params)
         return doc
 
     @classmethod

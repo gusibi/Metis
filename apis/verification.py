@@ -3,8 +3,11 @@
 import base64
 import time
 import jwt
+from weixin.helper import smart_bytes, smart_str
 
-from apis.models.oauth import Account
+from apis.models.oauth import Account, OAuth2Client
+from apis.settings import Config
+from apis.exception import Unauthorized
 
 
 def get_authorization(request):
@@ -19,15 +22,17 @@ def get_authorization(request):
 
 
 def verify_client(client_id, secret):
-    pass
+    client = OAuth2Client.get(client_id=smart_str(client_id),
+                              secret=smart_str(secret))
+    if client:
+        return True, client.get('scopes', [])
+    return False, []
 
 
 def verify_request(request):
     authorization_type, token = get_authorization(request)
     if authorization_type == 'Basic':
-        is_validate = verify_basic_token(token)
-        if not is_validate:
-            return False, None
+        return verify_basic_token(token)
     elif authorization_type == 'Bearer':
         return verify_bearer_token(token)
     return False, None
@@ -41,48 +46,71 @@ def verify_password(username, password):
         return {}
 
 
-def verify_wxapp(openid, password):
-    pass
+def get_wxapp_userinfo(encrypted_data, iv, code):
+    from weixin.lib.wxcrypt import WXBizDataCrypt
+    from weixin import WXAPPAPI
+    from weixin.oauth2 import OAuth2AuthExchangeError
+    appid = Config.WXAPP_ID
+    secret = Config.WXAPP_SECRET
+    api = WXAPPAPI(appid=appid, app_secret=secret)
+    try:
+        session_info = api.exchange_code_for_session_key(code=code)
+    except OAuth2AuthExchangeError as e:
+        raise Unauthorized(e.code, e.description)
+    session_key = session_info.get('session_key')
+    crypt = WXBizDataCrypt(appid, session_key)
+    user_info = crypt.decrypt(encrypted_data, iv)
+    return user_info
 
 
-def verify_code(code):
-    pass
+def verify_wxapp(encrypted_data, iv, code):
+    user_info = get_wxapp_userinfo(encrypted_data, iv, code)
+    openid = user_info.get('openId', None)
+    if openid:
+        auth = Account.get_by_wxapp(openid)
+        if not auth:
+            raise Unauthorized('wxapp_not_registered')
+        return True, auth
+    raise Unauthorized('invalid_wxapp_code')
 
 
 def create_token(request):
-    grant_type = request.json.get('grant_type')
+    # verify basic token
+    approach = request.json.get('auth_approach')
     username = request.json['username']
     password = request.json['password']
-    if grant_type == 'password':
+    if approach == 'password':
         account = verify_password(username, password)
-    elif grant_type == 'wxapp':
-        account = verify_wxapp(username, password)
+    elif approach == 'wxapp':
+        account = verify_wxapp(username, password, request.args.get('code'))
     if not account:
-        return {}
+        return False, {}
     payload = {
-        "iss": "gusibi.com",
-         "iat": int(time.time()),
-         "exp": int(time.time()) + 86400 * 7,
-         "aud": "www.gusibi.com",
-         "sub": str(account['_id']),
-         "username": account['username'],
-         "scopes": ['open']
+        "iss": Config.ISS,
+        "iat": int(time.time()),
+        "exp": int(time.time()) + 86400 * 7,
+        "aud": Config.AUDIENCE,
+        "sub": str(account['_id']),
+        "nickname": account['nickname'],
+        "scopes": ['open']
     }
-    print(payload)
     token = jwt.encode(payload, 'secret', algorithm='HS256')
     return True, {'access_token': token, 'account_id': str(account['_id'])}
+
 
 def verify_basic_token(token):
     try:
          client = base64.b64decode(token)
-         client_id, secret = client.split(':')
-    except (TypeError, ValueError):
-         return False, None
+         client_id, secret = smart_str(client).split(':')
+    except (TypeError, ValueError) as e:
+        return False, None
     return verify_client(client_id, secret)
 
 
 def verify_bearer_token(token):
-    payload = jwt.decode(token, 'secret', audience='www.gusibi.com', algorithms=['HS256'])
+    payload = jwt.decode(token, 'secret',
+                         audience=Config.AUDIENCE,
+                         algorithms=['HS256'])
     if payload:
         return True, token
     return False, token

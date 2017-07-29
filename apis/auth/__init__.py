@@ -13,7 +13,11 @@ from .validators import security
 def current_scopes(request):
     is_validate, token = verify_request(request)
     print(is_validate, token)
-    return ['register', 'open', 'login']
+    if is_validate and token:
+        if isinstance(token, list):
+            return token
+        return token.scopes
+    return []
 
 bp = Blueprint('auth', url_prefix='/auth')  # 需要加 url_prefix
 

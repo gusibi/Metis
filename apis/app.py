@@ -3,6 +3,7 @@
 from sanic import Sanic
 from sanic.response import json
 from sanic.exceptions import NotFound, InvalidUsage
+from apis.exception import Unauthorized
 
 
 from apis.settings import Config
@@ -25,6 +26,21 @@ def register_blueprints(app):
 
 
 app = create_app()
+
+
+def error_response(exception):
+    return json(
+        {
+            'error_code': exception.error_code,
+            'message': exception.message,
+            'text': exception.text
+        },
+        status=exception.status_code)
+
+
+@app.exception(Unauthorized)
+def unauthorized(request, exception):
+    return error_response(exception)
 
 
 @app.exception(NotFound)

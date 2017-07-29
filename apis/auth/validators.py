@@ -120,8 +120,8 @@ def request_validate(view):
     def wrapper(*args, **kwargs):
         request = args[1]
         endpoint = _path_to_endpoint(request.uri_template)
-        # scope
         current.request = request
+        # scope
         if (endpoint, request.method) in scopes and not set(
                 scopes[(endpoint, request.method)]).issubset(set(security.scopes)):
             raise ServerError('403', status_code=403)

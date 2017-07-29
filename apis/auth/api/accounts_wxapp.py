@@ -3,6 +3,8 @@
 from sanic.response import text, json
 
 from apis.models.oauth import Account
+from apis.exception import BadRequest
+from apis.verification import get_wxapp_userinfo
 
 from . import Resource
 from .. import schemas
@@ -11,13 +13,18 @@ from .. import schemas
 class AccountsWxapp(Resource):
 
     async def post(self, request):
-        username = request.json.get('username')
-        account = Account.get(username=username)
+        encrypted_data = request.json.get('username')
+        iv = request.json.get('iv')
+        code = request.json.get('code')
+        user_info = get_wxapp_userinfo(encrypted_data, iv, code)
+        openid = user_info.get('openid')
+        account = Account.get_by_wxapp(openid=openid)
         if account:
-            return json({'error_code': 'username_already',
-                         'message': 'Username already exists'},
-                         status=400
-                        )
-        account = Account.insert(username=username,
-                                 password=request.json['password'])
-        return account, 200
+            raise BadRequest('wxapp_already_registered')
+        params = {
+            'nickname': user_info['nickName'],
+            'avatar': user_info['avatarUrl'],
+            'authentications': {'wxapp': openid},
+        }
+        account = Account.insert(**params)
+        return account, 201

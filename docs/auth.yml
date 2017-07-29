@@ -100,10 +100,6 @@ definitions:
                 type: string
             password:
                 type: string
-            auth_approach:
-                type: string
-                enum:
-                    - wxapp
     OAuthBind:
         description: 绑定登录后绑定第三方帐号
         required:
@@ -201,6 +197,12 @@ parameters:
         name: Authorization
         required: true
         type: string
+    code:
+        description: code
+        in: query
+        name: code
+        required: false
+        type: string
 securityDefinitions:
     OAuth2:
         type: oauth2
@@ -220,6 +222,7 @@ paths:
             operationId: oauth_create_token
             parameters:
                 - $ref: '#/parameters/Authorization'
+                - $ref: '#/parameters/code'
                 - name: oauth
                   in: body
                   required: true

@@ -57,6 +57,10 @@ class Account(Model):
         'created_time': datetime.utcnow()
     }
 
+    @classmethod
+    def get_by_wxapp(cls, openid):
+        account = cls.get({'authentications.openid': openid})
+
 
 class OAuth2Token(Model):
 
@@ -68,7 +72,7 @@ class OAuth2Token(Model):
 
 class OAuth2Client(Model):
 
-    __collection__ = 'oauth_token'
+    __collection__ = 'oauth2_client'
     __default_fields__ = {
         'created_time': datetime.utcnow()
     }
