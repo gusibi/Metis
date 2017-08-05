@@ -2,8 +2,9 @@
 
 from sanic import Sanic
 from sanic.response import json
-from sanic.exceptions import NotFound, InvalidUsage
-from apis.exception import Unauthorized
+from sanic.exceptions import NotFound as _NotFound, InvalidUsage
+from apis.exception import (Unauthorized, NotFound, BadRequest,
+                            Forbidden, RequestTimeout, ServerError)
 
 
 from apis.settings import Config
@@ -28,7 +29,12 @@ def register_blueprints(app):
 app = create_app()
 
 
-def error_response(exception):
+all_json_errors = [BadRequest, Unauthorized, Forbidden,
+                   NotFound, RequestTimeout, ServerError]
+
+
+@app.exception(*all_json_errors)
+def json_error(request, exception):
     return json(
         {
             'error_code': exception.error_code,
@@ -38,12 +44,8 @@ def error_response(exception):
         status=exception.status_code)
 
 
-@app.exception(Unauthorized)
-def unauthorized(request, exception):
-    return error_response(exception)
-
-
-@app.exception(NotFound)
+# swagger validators 需要用到
+@app.exception(_NotFound)
 def not_found(request, exception):
     return json({'error_code': 'not_found',
                  'message': exception.args[0]},

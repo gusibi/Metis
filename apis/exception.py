@@ -1,5 +1,4 @@
 #! -*- coding: utf-8 -*-
-from sanic.response import json
 from sanic.exceptions import SanicException
 
 
@@ -20,7 +19,7 @@ def add_status_code(code):
     return class_decorator
 
 
-class ApiException(SanicException):
+class MetisException(SanicException):
 
     def __init__(self, code, message=None, text=None, status_code=None):
         super().__init__(message)
@@ -31,31 +30,33 @@ class ApiException(SanicException):
 
         if status_code is not None:
             self.status_code = status_code
-        self.headers = {
-            'Content-Type': 'application/json',
-        }
 
 
 @add_status_code(404)
-class NotFound(ApiException):
+class NotFound(MetisException):
     pass
 
 
 @add_status_code(400)
-class BadRequest(ApiException):
+class BadRequest(MetisException):
     pass
 
 
 @add_status_code(401)
-class Unauthorized(ApiException):
+class Unauthorized(MetisException):
     pass
 
 
 @add_status_code(403)
-class Forbidden(ApiException):
+class Forbidden(MetisException):
+    pass
+
+
+@add_status_code(403)
+class RequestTimeout(MetisException):
     pass
 
 
 @add_status_code(500)
-class ServerError(ApiException):
+class ServerError(MetisException):
     pass
