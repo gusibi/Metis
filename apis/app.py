@@ -23,7 +23,9 @@ def create_app(register_bp=True, test=False):
 
 def register_blueprints(app):
     from apis.auth import bp as auth_bp
+    from apis.v1 import bp as v1_bp
     app.blueprint(auth_bp)
+    app.blueprint(v1_bp)
 
 
 app = create_app()

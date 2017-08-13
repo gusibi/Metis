@@ -141,7 +141,7 @@ definitions:
         required:
             - option
         properties:
-            value:
+            option:
                 type: string
     OptionWithAnswer:
         required:
@@ -274,11 +274,16 @@ parameters:
         name: status
         type: string
         required: false
+        enum:
+            - draft
+            - published
+            - withdraw
     offset:
         description: offset in query
         in: query
         name: offset
         type: integer
+        format: int32
         default: 0
         required: false
     limit:
@@ -286,6 +291,7 @@ parameters:
         in: query
         name: limit
         type: integer
+        format: int32
         default: 20
         required: false
     code:
@@ -384,7 +390,9 @@ paths:
             responses:
                 200:
                     schema:
-                        $ref: '#/definitions/QuestionDetail'
+                        type: array
+                        items:
+                            $ref: '#/definitions/QuestionDetail'
                 default:
                     description: Unexpected error
                     schema:

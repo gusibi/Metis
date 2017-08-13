@@ -68,12 +68,21 @@ class Model(with_metaclass(ModelMetaclass, object)):
         return doc
 
     @classmethod
-    def find(cls, filter=None, projection=None, skip=0, limit=20, **kwargs):
-        docs = cls.collection.find(filter=filter,
-                                   projection=projection,
-                                   skip=skip, limit=limit,
-                                   **kwargs)
-        return docs
+    def find(cls, filter=None, projection=None, skip=0, limit=20, sort=None, asc=True, **kwargs):
+         if sort:
+             docs = cls.collection.find(filter=filter,
+                                        projection=projection,
+                                        **kwargs).skip(skip).limit(limit).sort({sort: 1 if asc else -1})
+         else:
+             docs = cls.collection.find(filter=filter,
+                                        projection=projection,
+                                        **kwargs).skip(skip).limit(limit)
+         results = []
+         for doc in docs:
+             if doc.get('_id', None):
+                 doc['id'] = str(doc['_id'])
+             results.append(doc)
+         return results
 
     @classmethod
     def insert(cls, **kwargs):
@@ -107,6 +116,14 @@ class Model(with_metaclass(ModelMetaclass, object)):
         '''
         results = cls.collection.insert_many(params)
         return results
+
+    @classmethod
+    def find_one_and_update(cls, filter, update=None,
+                            return_document=ReturnDocument.AFTER, **kwargs):
+        result = cls.collection.find_one_and_update(filter, update=update,
+                                                    return_document=return_document,
+                                                    **kwargs)
+        return result
 
     @classmethod
     def update_one(cls, filter, **kwargs):
