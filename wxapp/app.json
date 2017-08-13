@@ -3,7 +3,8 @@
         "pages/index/index",
         "pages/logs/logs",
         "pages/test_preview/test_preview",
-        "pages/test/test"
+        "pages/test/test",
+        "pages/self/self"
     ],
     "window": {
         "backgroundTextStyle": "light",
@@ -11,5 +12,25 @@
         "backgroundColor": "#f8f8f8",
         "navigationBarTitleText": "随你选",
         "navigationBarTextStyle": "black"
+    },
+    "tabBar": {
+        "color": "#505d72",
+        "selectedColor": "#1a84db",
+        "backgroundColor": "#ffffff",
+        "borderStyle": "white",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "首页",
+                "iconPath": "style/images/home.png",
+                "selectedIconPath": "style/images/home_selected.png"
+            },
+            {
+                "pagePath": "pages/self/self",
+                "text": "我的",
+                "iconPath": "style/images/user.png",
+                "selectedIconPath": "style/images/user_selected.png"
+            }
+        ]
     }
 }

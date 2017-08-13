@@ -10,8 +10,25 @@ from apis.settings import Config
 pyclient = MongoClient(Config.MONGO_MASTER_URL)
 
 
-class APIModel(object):
-    pass
+class ObjectModel(object):
+
+    @classmethod
+    def object_from_dictionary(cls, entry):
+        # make dict keys all strings
+        if entry is None:
+            return ""
+        entry_str_dict = dict([(str(key), value) for key, value in entry.items()])
+        return cls(**entry_str_dict)
+
+    def __repr__(self):
+        return str(self)
+        # if six.PY2:
+        #     return six.text_type(self).encode('utf8')
+        # else:
+        #     return self.encode('utf8')
+
+    def __str__(self):
+        return self.__unicode__()
 
 
 class ModelMetaclass(type):

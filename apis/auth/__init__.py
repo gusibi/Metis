@@ -12,7 +12,6 @@ from .validators import security
 @security.scopes_loader
 def current_scopes(request):
     is_validate, token = verify_request(request)
-    print(is_validate, token)
     if is_validate and token:
         if isinstance(token, list):
             return token

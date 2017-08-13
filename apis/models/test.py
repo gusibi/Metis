@@ -19,10 +19,15 @@ class Test(Model):
     :param created_time: 创建时间
     '''
 
-    __collection__ = 'choice'
+    __collection__ = 'test'
     __default_fields__ = {
+        'status': 'draft',
         'created_time': datetime.utcnow()
     }
+
+    @property
+    def creator(self):
+        pass
 
 
 class Question(Model):
@@ -40,3 +45,8 @@ class Question(Model):
                 ]
     :param index: 1,
     '''
+
+    __collection__ = 'question'
+    __default_fields__ = {
+        'created_time': datetime.utcnow()
+    }

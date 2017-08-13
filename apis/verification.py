@@ -3,11 +3,12 @@
 import base64
 import time
 import jwt
-from weixin.helper import smart_bytes, smart_str
+from weixin.helper import smart_str
 
 from apis.models.oauth import Account, OAuth2Client
 from apis.settings import Config
 from apis.exception import Unauthorized
+from apis.models import ObjectModel
 
 
 def get_authorization(request):
@@ -33,8 +34,8 @@ def verify_request(request):
     authorization_type, token = get_authorization(request)
     if authorization_type == 'Basic':
         return verify_basic_token(token)
-    elif authorization_type == 'Bearer':
-        return verify_bearer_token(token)
+    elif authorization_type == 'JWT':
+        return verify_jwt_token(token)
     return False, None
 
 
@@ -107,10 +108,10 @@ def verify_basic_token(token):
     return verify_client(client_id, secret)
 
 
-def verify_bearer_token(token):
+def verify_jwt_token(token):
     payload = jwt.decode(token, 'secret',
                          audience=Config.AUDIENCE,
                          algorithms=['HS256'])
     if payload:
-        return True, token
+        return True, ObjectModel.object_from_dictionary(payload)
     return False, token
