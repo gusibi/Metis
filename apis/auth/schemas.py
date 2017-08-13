@@ -12,25 +12,25 @@
 base_path = '/auth'
 
 
-DefinitionsSuccess = {'properties': {'ok': {'type': 'boolean'}}}
-DefinitionsToken = {'description': 'token', 'properties': {'access_token': {'type': 'string'}}}
-DefinitionsRefreshtoken = {'required': ['refresh_token', 'grant_type'], 'properties': {'refresh_token': {'type': 'string'}, 'grant_type': {'type': 'string', 'default': 'refresh_token', 'enum': ['refresh_token']}}}
-DefinitionsOauthbind = {'description': '绑定登录后绑定第三方帐号', 'required': ['auth_approach', 'identity', 'password'], 'properties': {'auth_approach': {'type': 'string', 'default': 'mobile', 'enum': ['weibo', 'weixin', 'wxapp'], 'description': '绑定第三方帐号 微信 微信公众号 微信小程序'}, 'password': {'type': 'string', 'description': '微博token/微信token'}, 'identity': {'type': 'string', 'description': 'weibo/weixin uid'}}}
-DefinitionsCreatewxappaccount = {'required': ['username', 'password', 'code'], 'properties': {'code': {'type': 'string'}, 'username': {'type': 'string'}, 'password': {'type': 'string'}}}
-DefinitionsAuthentications = {'description': '用户详细授权数据', 'properties': {'wxapp': {'type': 'string'}, 'mobile': {'type': 'string'}}}
 DefinitionsNone = {'type': 'object'}
-DefinitionsResetpassword = {'properties': {'mobile': {'type': 'string'}, 'old_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}, 'new_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
-DefinitionsAuth_approach = {'properties': {'auth_approach': {'type': 'string', 'default': 'mobile', 'enum': ['mobile', 'wxapp', 'weixin', 'weixin_mp'], 'description': '登录方式 手机 微信 微信小程序'}}}
-DefinitionsError = {'properties': {'error_code': {'type': 'integer', 'format': 'int32'}, 'message': {'type': 'string'}, 'text': {'type': 'string'}}}
-DefinitionsTokencode = {'required': ['code', 'grant_type'], 'properties': {'code': {'type': 'string'}, 'grant_type': {'type': 'string', 'default': 'token_code', 'enum': ['token_code']}}}
-DefinitionsApproach = {'required': ['approach'], 'properties': {'approach': {'type': 'string'}, 'identity': {'type': 'string'}, 'is_verified': {'type': 'boolean'}}}
+DefinitionsOauthbind = {'description': '绑定登录后绑定第三方帐号', 'required': ['auth_approach', 'identity', 'password'], 'properties': {'auth_approach': {'type': 'string', 'default': 'mobile', 'enum': ['weibo', 'weixin', 'wxapp'], 'description': '绑定第三方帐号 微信 微信公众号 微信小程序'}, 'password': {'type': 'string', 'description': '微博token/微信token'}, 'identity': {'type': 'string', 'description': 'weibo/weixin uid'}}}
 DefinitionsPassword = {'required': ['password'], 'properties': {'password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
-DefinitionsAccount = {'description': 'account 基本信息', 'required': ['id'], 'properties': {'id': {'type': 'string'}, 'date_created': {'format': 'datetime', 'type': 'string'}}}
-DefinitionsUpdatepassword = {'properties': {'new_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}, 'password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
 DefinitionsScopes = {'required': ['scopes'], 'properties': {'scopes': {'type': 'array', 'items': {'type': 'string'}, 'description': 'token 类型'}}}
+DefinitionsRefreshtoken = {'required': ['refresh_token', 'grant_type'], 'properties': {'refresh_token': {'type': 'string'}, 'grant_type': {'type': 'string', 'default': 'refresh_token', 'enum': ['refresh_token']}}}
+DefinitionsSuccess = {'properties': {'ok': {'type': 'boolean'}}}
+DefinitionsAuthentications = {'description': '用户详细授权数据', 'properties': {'wxapp': {'type': 'string'}, 'mobile': {'type': 'string'}}}
 DefinitionsTokendetail = {'description': '返回的token信息', 'required': ['account_id', 'access_token', 'token_type'], 'properties': {'account_id': {'type': 'string', 'format': 'int32'}, 'access_token': {'type': 'string'}, 'token_type': {'type': 'string', 'default': 'jwt'}}}
-DefinitionsAccountdetail = {'description': 'account 信息', 'required': ['id'], 'properties': {'id': {'type': 'string'}, 'username': {'type': 'string'}, 'nickname': {'type': 'string'}, 'avatar': {'type': 'string'}, 'authentications': DefinitionsAuthentications, 'created_time': {'format': 'datetime', 'type': 'string'}}}
+DefinitionsResetpassword = {'properties': {'mobile': {'type': 'string'}, 'old_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}, 'new_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
+DefinitionsApproach = {'required': ['approach'], 'properties': {'approach': {'type': 'string'}, 'identity': {'type': 'string'}, 'is_verified': {'type': 'boolean'}}}
+DefinitionsCreatewxappaccount = {'required': ['username', 'password', 'code'], 'properties': {'code': {'type': 'string'}, 'username': {'type': 'string'}, 'password': {'type': 'string'}}}
+DefinitionsUpdatepassword = {'properties': {'new_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}, 'password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
+DefinitionsError = {'properties': {'error_code': {'type': 'integer', 'format': 'int32'}, 'message': {'type': 'string'}, 'text': {'type': 'string'}}}
+DefinitionsAuth_approach = {'properties': {'auth_approach': {'type': 'string', 'default': 'mobile', 'enum': ['mobile', 'wxapp', 'weixin', 'weixin_mp'], 'description': '登录方式 手机 微信 微信小程序'}}}
+DefinitionsToken = {'description': 'token', 'properties': {'access_token': {'type': 'string'}}}
+DefinitionsTokencode = {'required': ['code', 'grant_type'], 'properties': {'code': {'type': 'string'}, 'grant_type': {'type': 'string', 'default': 'token_code', 'enum': ['token_code']}}}
+DefinitionsAccount = {'description': 'account 基本信息', 'required': ['id'], 'properties': {'id': {'type': 'string'}, 'date_created': {'format': 'datetime', 'type': 'string'}}}
 DefinitionsAuthentication = {'type': 'object', 'description': '获取token 登录 使用', 'required': ['username', 'password'], 'optional': ['grant_type', 'auth_approach'], 'allOf': [DefinitionsAuth_approach, {'type': 'object'}], 'properties': {'username': {'type': 'string', 'description': '手机号//微信open_id/email'}, 'password': {'type': 'string', 'description': '密码/微信token'}, 'grant_type': {'type': 'string', 'default': 'password', 'enum': ['password'], 'description': '认证类型 默认密码'}}}
+DefinitionsAccountdetail = {'description': 'account 信息', 'required': ['id'], 'properties': {'id': {'type': 'string'}, 'username': {'type': 'string'}, 'nickname': {'type': 'string'}, 'avatar': {'type': 'string'}, 'authentications': DefinitionsAuthentications, 'created_time': {'format': 'datetime', 'type': 'string'}}}
 
 validators = {
     ('oauth_token', 'POST'): {'json': DefinitionsAuthentication, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'description': '格式 (Basic hashkey) 注 hashkey为client_id + client_secret 做BASE64处理', 'type': 'string'}}}, 'args': {'required': [], 'properties': {'code': {'description': 'code', 'required': False, 'type': 'string'}}}},
@@ -44,11 +44,11 @@ validators = {
 }
 
 filters = {
-    ('oauth_token', 'POST'): {200: {'headers': None, 'schema': DefinitionsTokendetail}},
+    ('oauth_token', 'POST'): {201: {'headers': None, 'schema': DefinitionsTokendetail}},
     ('oauth_token_refresh', 'POST'): {200: {'headers': None, 'schema': DefinitionsTokendetail}},
     ('oauth_token_code', 'POST'): {200: {'headers': None, 'schema': DefinitionsTokendetail}},
     ('accounts_wxapp', 'POST'): {201: {'headers': None, 'schema': DefinitionsAccount}},
-    ('accounts_self', 'GET'): {201: {'headers': None, 'schema': DefinitionsAccountdetail}},
+    ('accounts_self', 'GET'): {200: {'headers': None, 'schema': DefinitionsAccountdetail}},
     ('self_password', 'POST'): {201: {'headers': None, 'schema': DefinitionsSuccess}},
     ('self_password', 'PUT'): {200: {'headers': None, 'schema': DefinitionsSuccess}},
     ('self_password_reset', 'POST'): {200: {'headers': None, 'schema': DefinitionsSuccess}},

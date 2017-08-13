@@ -266,7 +266,7 @@ paths:
                   schema:
                       $ref: '#/definitions/Authentication'
             responses:
-                200:
+                201:
                     description: access token
                     schema:
                         $ref: '#/definitions/TokenDetail'
@@ -353,7 +353,7 @@ paths:
             parameters:
                 - $ref: '#/parameters/AccessToken'
             responses:
-                201:
+                200:
                     description: 帐号信息
                     schema:
                         $ref: '#/definitions/AccountDetail'
