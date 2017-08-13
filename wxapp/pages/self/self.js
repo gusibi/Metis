@@ -9,6 +9,7 @@ Page({
    */
   data: {
       jwt: {},
+      account: {}
   },
 
   /**
@@ -18,21 +19,21 @@ Page({
       var test_id = options.test_id,
           that = this,
           jwt = {};
-      wx.getStorage({
-          key: 'jwt',
-          success: function (res) {
+      try {
+          var jwt = wx.getStorageSync('jwt')
+          console.log(jwt);
+          if (jwt) {
               that.setData({
-                  jwt: res.data
+                  jwt: jwt
               })
-          },
-          fail: function(res){
-              common.login(that)
           }
-      })
+      } catch (e) {
+          common.login(that)
+      }
       wx.request({ // 请求注册用户接口
           url: config.host + '/auth/accounts/self',
           header: {
-              Authorization: 'JWT' + that.data.jwt.access_token
+              Authorization: 'JWT' + ' ' + that.data.jwt.access_token
           },
           method: "GET",
           success: function (res) {
@@ -41,15 +42,16 @@ Page({
                       title: '取到用户信息',
                       icon: 'success'
                   });
+                  console.log(res.data);
+                  that.setData({
+                      account: res.data
+                  });
               } else if (res.statusCode === 404) {
                   wx.showToast({
                       title: '用户不存在',
                       icon: 'success'
                   });
-                  that.login();
               }
-              console.log(res.statusCode);
-              console.log('request token success');
           },
           fail: function (res) {
               console.log('request token fail');

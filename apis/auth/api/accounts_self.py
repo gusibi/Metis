@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from sanic.response import text
+from apis.exception import NotFound
 
 from apis.verification import current_account
 from apis.exception import NotFound

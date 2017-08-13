@@ -74,7 +74,7 @@ Page({
             wx.request({ // 发送请求 获取 jwt
                 url: config.host + '/v1/tests/' + that.data.test_id,
                 header: {
-                    Authorization: 'JWT' + that.data.jwt.access_token
+                    Authorization: 'JWT' + ' ' + that.data.jwt.access_token
                 },
                 data: {
                     step: that.step,

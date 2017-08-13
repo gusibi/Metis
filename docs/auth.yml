@@ -266,7 +266,7 @@ paths:
                   schema:
                       $ref: '#/definitions/Authentication'
             responses:
-                201:
+                200:
                     description: access token
                     schema:
                         $ref: '#/definitions/TokenDetail'
