@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 from sanic import Blueprint
 
-from apis.verification import verify_request
+from apis.verification import verify_request, current_account
 
 from .routes import routes
 from .validators import security
@@ -15,6 +15,7 @@ def current_scopes(request):
     if is_validate and token:
         if isinstance(token, list):
             return token
+        current_account.id = token.sub
         return token.scopes
     return []
 

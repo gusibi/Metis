@@ -11,6 +11,14 @@ from apis.exception import Unauthorized
 from apis.models import ObjectModel
 
 
+class CurrentAccount(object):
+
+    id = None
+
+
+current_account = CurrentAccount()
+
+
 def get_authorization(request):
     authorization = request.headers.get('Authorization')
     if not authorization:
@@ -101,9 +109,9 @@ def create_token(request):
 
 def verify_basic_token(token):
     try:
-         client = base64.b64decode(token)
-         client_id, secret = smart_str(client).split(':')
-    except (TypeError, ValueError) as e:
+        client = base64.b64decode(token)
+        client_id, secret = smart_str(client).split(':')
+    except (TypeError, ValueError):
         return False, None
     return verify_client(client_id, secret)
 

@@ -12,6 +12,10 @@ pyclient = MongoClient(Config.MONGO_MASTER_URL)
 
 class ObjectModel(object):
 
+    def __init__(self, *args, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
     @classmethod
     def object_from_dictionary(cls, entry):
         # make dict keys all strings
@@ -54,10 +58,13 @@ class Model(with_metaclass(ModelMetaclass, object)):
 
     @classmethod
     def get(cls, _id=None, **kwargs):
+        from bson.objectid import ObjectId
         if _id:
-            doc = cls.collection.find_one({'_id': _id})
+            doc = cls.collection.find_one({'_id': ObjectId(_id)})
         else:
             doc = cls.collection.find_one(kwargs)
+        if doc.get('_id', None):
+            doc['id'] = str(doc['_id'])
         return doc
 
     @classmethod
