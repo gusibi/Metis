@@ -35,9 +35,8 @@ class Question(Model):
     :param type: 题目类型 'single_choice|multiple_choice'
     :param options: 选项
                 [
-                '这是第一个选项',
-                '这是第二个选项',
+                {'value': '这是第一个选项', 'is_checked': True},
+                {'value': '这是第二个选项', 'is_checked': False},
                 ]
-    :param answers: [1, 2],
     :param index: 1,
     '''

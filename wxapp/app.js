@@ -86,6 +86,7 @@ App({
         wx.login({ // 调用登录接口获取 code
             success: function(res) {
                 var code = res.code;
+                consolse.log('>>>>>>>>>>>>>>');
                 wx.getUserInfo({
                     // 调用 getUserInfo 获取 encryptedData 和 iv
                     success: function(res) {

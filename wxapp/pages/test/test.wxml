@@ -1,0 +1,27 @@
+<view class="page" xmlns:wx="http://www.w3.org/1999/xhtml">
+    <view class="page__hd"  wx:if="{{test_id}}">
+        <view class="page__title">第一题</view>
+        <view class="page__desc">单选</view>
+    </view>
+    <view class="page__bd"  wx:if="{{test_id}}">
+        <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{error_msg}}</view>
+        <view wx:if="{{test_id}}">
+        <view class="weui-cells__title">{{questions[step]}}</view>
+        <view class="weui-cells weui-cells_after-title metis-panel">
+            <radio-group bindchange="radioChange" class="kind-list">
+                <label class="weui-cell weui-check__label kind-list__item" wx:for="{{radioItems}}" wx:for-index="index" wx:key="name">
+                    <radio class="weui-check" value="{{index}}" checked="{{item.checked}}"/>
+                    <view class="weui-cell__bd">{{item.name}}</view>
+                    <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.checked}}">
+                        <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+                    </view>
+                </label>
+            </radio-group>
+        </view>
+        <view class="weui-flex metis-panel">
+            <view class="weui-flex__item"><button class="weui-btn metis-btn-sp-area" type="default" bindtap="showTopTips">上一题</button></view>
+            <view class="weui-flex__item"><button class="weui-btn metis-btn-sp-area" type="primary" bindtap="submit">下一题</button></view>
+        </view>
+        </view>
+    </view>
+</view>

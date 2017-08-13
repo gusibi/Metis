@@ -1,0 +1,522 @@
+swagger: '2.0'
+info:
+    title: Metis v1 API
+    version: '1.0.0'
+schemes:
+    - http
+basePath: /v1
+consumes:
+    - application/json
+produces:
+    - application/json
+definitions:
+    Authentications:
+        description: 用户详细授权数据
+        properties:
+            wxapp:
+                type: string
+            mobile:
+                type: string
+    Account:
+        description: account 基本信息
+        required:
+            - id
+        properties:
+            id:
+                type: string
+            nickname:
+                type: string
+            avatar:
+                type: string
+    AccountDetail:
+        description: account 信息
+        required:
+            - id
+        properties:
+            id:
+                type: string
+            username:
+                type: string
+            nickname:
+                type: string
+            avatar:
+                type: string
+            authentications:
+                $ref: '#/definitions/Authentications'
+            created_time:
+                format: datetime
+                type: string
+    Testing:
+        required:
+            - id
+            - score
+            - title
+            - description
+        properties:
+            id:
+                type: string
+            score:
+                type: integer
+                format: int32
+            image:
+                type: string
+            title:
+                type: string
+            description:
+                type: string
+            creator:
+                $ref: '#/definitions/Account'
+            created_time:
+                type: string
+                description: 测试时间
+                format: datetime
+    CreateTest:
+        required:
+            - title
+            - description
+        properties:
+            image:
+                type: string
+            title:
+                type: string
+            description:
+                type: string
+            start_time:
+                type: string
+            end_time:
+                type: string
+    UpdateTest:
+        properties:
+            image:
+                type: string
+            title:
+                type: string
+            description:
+                type: string
+            start_time:
+                type: string
+            end_time:
+                type: string
+            status:
+                type: string
+    Test:
+        required:
+            - id
+            - title
+            - description
+        properties:
+            id:
+                type: string
+            image:
+                type: string
+            title:
+                type: string
+            description:
+                type: string
+            creator:
+                $ref: '#/definitions/Account'
+            created_time:
+                type: string
+                format: datetime
+    TestDetail:
+        required:
+            - id
+            - title
+            - description
+        properties:
+            id:
+                type: string
+            image:
+                type: string
+            title:
+                type: string
+            description:
+                type: string
+            creator:
+                $ref: '#/definitions/Account'
+            created_time:
+                type: string
+                format: datetime
+    Option:
+        required:
+            - option
+        properties:
+            value:
+                type: string
+    OptionWithAnswer:
+        required:
+            - option
+            - is_checked
+        properties:
+            value:
+                type: string
+            is_checked:
+                type: boolean
+    Question:
+        required:
+            - title
+            - options
+        properties:
+            title:
+                type: string
+            options:
+                type: array
+                items:
+                    $ref: '#/definitions/Option'
+    QuestionDetail:
+        required:
+            - title
+            - options
+        properties:
+            title:
+                type: string
+            type:
+                type: string
+                enum:
+                    - single_choice
+                    - multiple_choice
+            index:
+                type: integer
+                format: int32
+            options:
+                type: array
+                items:
+                    $ref: '#/definitions/OptionWithAnswer'
+    CreateQuestion:
+        properties:
+            title:
+                type: string
+            type:
+                type: string
+                enum:
+                    - single_choice
+                    - multiple_choice
+            options:
+                type: array
+                items:
+                    $ref: '#/definitions/OptionWithAnswer'
+    UpdateQuestion:
+        properties:
+            title:
+                type: string
+            type:
+                type: string
+                enum:
+                    - single_choice
+                    - multiple_choice
+            options:
+                type: array
+                items:
+                    $ref: '#/definitions/OptionWithAnswer'
+    Distribution:
+        properties:
+            value:
+                type: string
+            count:
+                type: integer
+                format: int32
+    TestingStatistics:
+        properties:
+            total_count:
+                type: integer
+            max_score:
+                type: integer
+            min_score:
+                type: integer
+            avg_score:
+                type: integer
+            distributions:
+                type: array
+                items:
+                    $ref: '#/definitions/Distribution'
+    Error:
+        properties:
+            error_code:
+                type: integer
+                format: int32
+            message:
+                type: string
+            text:
+                type: string
+    Success:
+        properties:
+            ok:
+                type: boolean
+    None:
+        type: object
+parameters:
+    AccessToken:
+        name: Authorization
+        in: header
+        required: true
+        type: string
+    Authorization:
+        description: 格式 (Basic hashkey) 注 hashkey为client_id + client_secret 做BASE64处理
+        in: header
+        name: Authorization
+        required: true
+        type: string
+    id_in_path:
+        description: id in path
+        in: path
+        name: id
+        required: true
+        type: string
+    test_id_in_path:
+        description: test id in path
+        in: path
+        name: test_id
+        type: string
+        required: true
+    test_status_in_query:
+        description: test status in query
+        in: query
+        name: status
+        type: string
+        required: false
+    offset:
+        description: offset in query
+        in: query
+        name: offset
+        type: integer
+        default: 0
+        required: false
+    limit:
+        description: limit in query
+        in: query
+        name: limit
+        type: integer
+        default: 20
+        required: false
+    code:
+        description: code
+        in: query
+        name: code
+        required: false
+        type: string
+securityDefinitions:
+    OAuth2:
+        type: oauth2
+        flow: password
+        tokenUrl: https://apis-metis.gusibi.mobi/oauth/token
+        scopes:
+            register: 用户注册
+            open: 开放API
+paths:
+    /self/tests:
+        get:
+            summary: 获取测试列表
+            description: 获取用户自己创建的测试列表
+            tags: [SELF]
+            operationId: get_tests
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/test_status_in_query'
+                - $ref: '#/parameters/offset'
+                - $ref: '#/parameters/limit'
+            responses:
+                200:
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/definitions/TestDetail'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+        post:
+            summary: 新建测试
+            description: 新建测试
+            tags: [SELF]
+            operationId: create_test
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - name: create_test
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/CreateTest'
+            responses:
+                201:
+                    schema:
+                        $ref: '#/definitions/TestDetail'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+    /self/tests/{id}:
+        put:
+            summary: 修改测试
+            description: 修改测试（发布|撤销）
+            tags: [SELF]
+            operationId: update_test
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/id_in_path'
+                - name: update_test
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/UpdateTest'
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/Test'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+    /self/tests/{id}/questions:
+        get:
+            summary: 获取测试问题列表
+            description: 获取用户自己的测试问题列表, 包含答案
+            tags: [SELF]
+            operationId: get_test_questions
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/id_in_path'
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/QuestionDetail'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+        post:
+            summary: 给测试添加问题
+            description: 给测试添加问题，发布后的测试不能修改
+            tags: [SELF]
+            operationId: reset_password
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/id_in_path'
+                - name: reset_password
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/CreateQuestion'
+            responses:
+                201:
+                    schema:
+                        $ref: '#/definitions/QuestionDetail'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+    /self/tests/{test_id}/questions/{id}:
+        post:
+            summary: 给测试添加问题
+            description: 给测试添加问题，发布后的测试不能修改
+            tags: [SELF]
+            operationId: reset_password
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/test_id_in_path'
+                - $ref: '#/parameters/id_in_path'
+                - name: reset_password
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/UpdateQuestion'
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/Question'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+    /self/testings:
+        get:
+            summary: 获取自己做过的测试列表
+            description: 获取用户自己做过的测试列表
+            tags: [SELF]
+            operationId: get_tests
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/offset'
+                - $ref: '#/parameters/limit'
+            responses:
+                200:
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/definitions/Testing'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+    /tests/{id}:
+        get:
+            summary: 用户获取测试题
+            description: 用户获取测试题
+            tags: [TESTING]
+            operationId: get_test_questions
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/id_in_path'
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/Test'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+    /tests/{id}/questions:
+        get:
+            summary: 用户获取测试问题
+            description: 用户获取测试问题
+            tags: [TESTING]
+            operationId: get_test_questions
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/id_in_path'
+            responses:
+                200:
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/definitions/Question'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+    /tests/{id}/statistics:
+        get:
+            summary: 测试统计结果
+            description: 测试统计结果 分数段占比
+            tags: [TESTING]
+            operationId: get_test_questions
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/id_in_path'
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/TestingStatistics'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]

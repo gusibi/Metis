@@ -46,6 +46,13 @@ definitions:
                 enum: 
                     - password
                 description: 认证类型 默认密码
+    Authentications:
+        description: 用户详细授权数据
+        properties:
+            wxapp:
+                type: string
+            mobile:
+                type: string
     TokenDetail:
         description: 返回的token信息
         required:
@@ -60,12 +67,24 @@ definitions:
                 type: string
             token_type:
                 type: string
-                default: Bearer
+                default: jwt
     Token:
         description: token
         properties:
             access_token:
                 type: string
+    TokenCode:
+        required:
+            - code
+            - grant_type
+        properties:
+            code:
+                type: string
+            grant_type:
+                type: string
+                default: token_code
+                enum:
+                    - token_code
     RefreshToken:
         required:
             - refresh_token
@@ -86,6 +105,24 @@ definitions:
             id:
                 type: string
             date_created:
+                format: datetime
+                type: string
+    AccountDetail:
+        description: account 信息
+        required:
+            - id
+        properties:
+            id:
+                type: string
+            username:
+                type: string
+            nickname:
+                type: string
+            avatar:
+                type: string
+            authentications:
+                $ref: '#/definitions/Authentications'
+            created_time:
                 format: datetime
                 type: string
     CreateWXAPPAccount:
@@ -241,7 +278,7 @@ paths:
                 - OAuth2: [login, register]
     /oauth/token/refresh:
         post:
-            summary: 通过 refresh token  获取新token
+            summary: 通过原 token  获取新token
             tags: [OAUTH]
             parameters:
                 - $ref: '#/parameters/Authorization'
@@ -261,17 +298,17 @@ paths:
                         $ref: '#/definitions/Error'
             security:
                 - OAuth2: [login]
-    /oauth/token/info:
+    /oauth/token/code:
         post:
-            summary: 检查 token 信息
+            summary: 通过 token_code 获取新token
             tags: [OAUTH]
             parameters:
                 - $ref: '#/parameters/Authorization'
-                - name: access_token
+                - name: refresh_token
                   in: body
                   required: true
                   schema:
-                      $ref: '#/definitions/Token'
+                      $ref: '#/definitions/TokenCode'
             responses:
                 200:
                     description: access token
@@ -283,30 +320,6 @@ paths:
                         $ref: '#/definitions/Error'
             security:
                 - OAuth2: [login]
-    /oauth/bind:
-        post:
-            summary: 登录后绑定第三方帐号
-            description: 登录后绑定第三方帐号 支持微博 微信 百度
-            tags: [OAUTH]
-            operationId: oauth_bind
-            parameters:
-                - $ref: '#/parameters/AccessToken'
-                - name: auth_bind
-                  in: body
-                  required: true
-                  schema:
-                      $ref: '#/definitions/OAuthBind'
-            responses:
-                201:
-                    description: 用户完整信息
-                    schema:
-                        $ref: '#/definitions/Success'
-                default:
-                    description: Unexpected error
-                    schema:
-                        $ref: '#/definitions/Error'
-            security:
-                - OAuth2: [open]
     /accounts/wxapp:
         post:
             summary: 微信小程序注册
@@ -331,6 +344,25 @@ paths:
                         $ref: '#/definitions/Error'
             security:
                 - OAuth2: [login]
+    /accounts/self:
+        get:
+            summary: 获取用户详细信息
+            description: 获取用户详细信息
+            tags: [ACCOUNTS]
+            operationId: get_account_detail
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+            responses:
+                201:
+                    description: 帐号信息
+                    schema:
+                        $ref: '#/definitions/AccountDetail'
+                default:
+                    description: Unexpected Error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
     /self/password:
         post:
             summary: 设置密码

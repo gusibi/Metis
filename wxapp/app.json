@@ -1,12 +1,15 @@
 {
-  "pages":[
-    "pages/index/index",
-    "pages/logs/logs"
-  ],
-  "window":{
-    "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle":"black"
-  }
+    "pages": [
+        "pages/index/index",
+        "pages/logs/logs",
+        "pages/test_preview/test_preview",
+        "pages/test/test"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#f8f8f8",
+        "backgroundColor": "#f8f8f8",
+        "navigationBarTitleText": "随你选",
+        "navigationBarTextStyle": "black"
+    }
 }
