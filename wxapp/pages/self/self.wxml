@@ -24,4 +24,9 @@
                 <view class="weui-cell__ft weui-cell__ft_in-access"></view>
             </view>
         </view>
+        <view class="weui-btn-area">
+            <navigator url="/pages/tests/create">
+                <button class="weui-btn" type="primary">新建一个测试</button>
+            </navigator>
+        </view>
 </view>

@@ -1,4 +1,20 @@
 # -*- coding: utf-8 -*-
+import dateutil.parser
+from dateutil import tz
+
+
+def str_to_time(s, time_zone='Asia/Shanghai'):
+    """
+    str time to datetime
+    """
+    tzinfo = tz.gettz(time_zone)
+    if not s:
+        return None
+    try:
+        dt = dateutil.parser.parse(s).replace(tzinfo=tzinfo)
+        return dt
+    except ValueError:
+        raise ValueError('%s parsed error' % s)
 
 
 def get_offset_limit(args):

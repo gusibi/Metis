@@ -4,7 +4,10 @@
         "pages/logs/logs",
         "pages/test_preview/test_preview",
         "pages/test/test",
-        "pages/self/self"
+        "pages/self/self",
+        "pages/tests/create",
+        "pages/tests/update",
+        "pages/questions/create"
     ],
     "window": {
         "backgroundTextStyle": "light",

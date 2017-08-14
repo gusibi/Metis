@@ -88,7 +88,7 @@ class Model(with_metaclass(ModelMetaclass, object)):
     def insert(cls, **kwargs):
         params = getattr(cls, '__default_fields__', {})
         params.update(kwargs)
-        _id = cls.collection.insert_one(params).inserted_id
+        _id = cls.collection.insert_one(params.copy()).inserted_id
         kwargs['id'] = str(_id)
         return kwargs
 
