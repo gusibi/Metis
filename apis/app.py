@@ -5,6 +5,9 @@ from sanic.response import json
 from sanic.exceptions import NotFound as _NotFound, InvalidUsage
 from apis.exception import (Unauthorized, NotFound, BadRequest,
                             Forbidden, RequestTimeout, ServerError)
+from apis.custom_errors import (UnprocessableEntity,
+                                ServerError as _ServerError,
+                                Forbidden as _Forbidden)
 
 
 from apis.settings import Config
@@ -53,6 +56,17 @@ def not_found(request, exception):
                  'message': exception.args[0]},
                 status=exception.status_code,
                 )
+
+
+@app.exception(UnprocessableEntity, _Forbidden, _ServerError)
+def custom_json_errors(request, exception):
+    return json(
+        {
+            'error_code': exception.error_code,
+            'message': exception.message,
+            'errors': exception.errors
+        },
+        status=exception.status_code)
 
 
 @app.exception(InvalidUsage)

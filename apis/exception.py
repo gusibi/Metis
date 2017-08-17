@@ -52,7 +52,7 @@ class Forbidden(MetisException):
     pass
 
 
-@add_status_code(403)
+@add_status_code(408)
 class RequestTimeout(MetisException):
     pass
 

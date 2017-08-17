@@ -14,7 +14,6 @@ from functools import wraps
 
 import six
 from sanic import response
-from sanic.exceptions import ServerError
 from sanic.response import HTTPResponse
 
 from werkzeug.datastructures import MultiDict, Headers
@@ -23,6 +22,7 @@ from jsonschema import Draft4Validator
 
 from .schemas import (
     validators, filters, scopes, security, base_path, normalize, current)
+from ..custom_errors import UnprocessableEntity, Forbidden, ServerError
 
 
 def unpack(value):
@@ -110,7 +110,7 @@ class SanicValidatorAdaptor(object):
 
     def validate(self, value):
         value = self.type_convert(value)
-        errors = list(e.message for e in self.validator.iter_errors(value))
+        errors = list({'field': e.path[0], 'message': e.message} for e in self.validator.iter_errors(value))
         return normalize(self.validator.schema, value)[0], errors
 
 
@@ -124,7 +124,7 @@ def request_validate(view):
         # scope
         if (endpoint, request.method) in scopes and not set(
                 scopes[(endpoint, request.method)]).issubset(set(security.scopes)):
-            raise ServerError('403', status_code=403)
+            raise Forbidden('Forbidden', message='Invalid token')
         # data
         method = request.method
         if method == 'HEAD':
@@ -137,7 +137,8 @@ def request_validate(view):
             validator = SanicValidatorAdaptor(schema)
             result, errors = validator.validate(value)
             if errors:
-                raise ServerError('Unprocessable Entity', status_code=422)
+                raise UnprocessableEntity('HTTPUnprocessableEntity',
+                                          errors=errors)
         return view(*args, **kwargs)
 
     return wrapper
@@ -178,7 +179,7 @@ def response_filter(view):
         schemas = filter.get(status)
         if not schemas:
             # return resp, status, headers
-            raise ServerError('`%d` is not a defined status code.' % status, 500)
+            raise ServerError('undefined', message='`%d` is not a defined status code.' % status)
 
         resp, errors = normalize(schemas['schema'], resp)
         if schemas['headers']:
@@ -186,7 +187,8 @@ def response_filter(view):
                 {'properties': schemas['headers']}, headers)
             errors.extend(header_errors)
         if errors:
-            raise ServerError('Expectation Failed', 500)
+            error_code = errors[0].get('name', 'ExpectationFailed')
+            raise ServerError(error_code, errors=errors)
 
         return response.json(
             resp,

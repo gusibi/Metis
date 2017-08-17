@@ -9,13 +9,17 @@
                     <view style="font-size: 13px;color: #888888;">摘要信息</view>
                 </view>
             </view>
+            <navigator url="/pages/self_tests/list">
             <view class="weui-cell weui-cell_access">
+                
                 <view class="weui-cell__bd">
                     <view style="display: inline-block; vertical-align: middle">我创建的测试</view>
                     <view class="weui-badge" style="margin-left: 5px;">{{account.test_count||0}}</view>
                 </view>
                 <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                
             </view>
+            </navigator>
             <view class="weui-cell weui-cell_access">
                 <view class="weui-cell__bd">
                     <view style="display: inline-block; vertical-align: middle">我参与的测试</view>

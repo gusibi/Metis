@@ -379,7 +379,7 @@ paths:
             responses:
                 201:
                     schema:
-                        $ref: '#/definitions/Success'
+                        $ref: '#/definitions/Password'
                 default:
                     description: Unexpected error
                     schema:

@@ -19,7 +19,6 @@ Page({
       wx.setNavigationBarTitle({
           title: options.title
       });
-  
   },
 
   /**

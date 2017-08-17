@@ -30,6 +30,23 @@ Page({
       } catch (e) {
           common.login(that)
       }
+      try {
+          var account = wx.getStorageSync('account_self')
+          if (account) {
+              that.setData({
+                  account: account
+              })
+          } else{
+              that.get_user_info();
+          }
+      } catch (e){
+          that.get_user_info();
+      } 
+  
+  },
+
+  get_user_info: function() {
+      var that = this;
       wx.request({ // 请求注册用户接口
           url: config.host + '/auth/accounts/self',
           header: {
@@ -46,6 +63,7 @@ Page({
                   that.setData({
                       account: res.data
                   });
+                  that.save_user_info(res.data);
               } else if (res.statusCode === 404) {
                   wx.showToast({
                       title: '用户不存在',
@@ -57,7 +75,13 @@ Page({
               console.log('request token fail');
           }
       })
-  
+  },
+
+  save_user_info: function(account) {
+    wx.setStorage({
+        key: 'account_self',
+        data: account,
+    })
   },
 
   /**
