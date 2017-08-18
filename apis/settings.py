@@ -35,3 +35,7 @@ except:
         WXAPP_ENCODINGAESKEY = environ.get('WXAPP_ENCODINGAESKEY', '')
 
         # cdn 使用 腾讯云
+        QCOS_APPID = environ.get('QCOS_APPID', 'appid')
+        QCOS_SECRET_ID = environ.get('QCOS_SECRET_ID', 'id')
+        QCOS_SECRET_KEY = environ.get('QCOS_SECRET_KEY', 'KEY')
+        QCOS_BUCKET_NAME = environ.get('QCOS_BUCKET_NAME', 'name')

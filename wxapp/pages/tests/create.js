@@ -1,6 +1,7 @@
 // tests/create.js
 var config = require('../../config.js');
 var common = require('../../common.js');
+var upload = require('../../utils/upload.js')
 Page({
 
   /**
@@ -94,7 +95,27 @@ Page({
     formReset: function () {
         console.log('form发生了reset事件')
     },
+    uploadToCos: function () {
+        var that = this;
 
+        console.log(this)
+
+        // 选择上传的图片
+        wx.chooseImage({
+            success: function (res) {
+
+                // 获取文件路径
+                var filePath = res.tempFilePaths[0];
+
+                // 获取文件名
+                var fileName = filePath.match(/(wxfile:\/\/)(.+)/)
+                fileName = fileName[2]
+
+                // 文件上传cos
+                upload(filePath, fileName, that.data.jwt.access_token)
+            }
+        })
+    },
   /**
    * 生命周期函数--监听页面加载
    */

@@ -229,6 +229,10 @@ definitions:
                 type: array
                 items:
                     $ref: '#/definitions/Distribution'
+    QCOSConfig:
+        properties:
+            sign:
+                type: string
     Error:
         properties:
             error_code:
@@ -278,6 +282,12 @@ parameters:
             - draft
             - published
             - withdraw
+    qcos_path_in_query:
+        description: cos path
+        in: query
+        name: cos_path
+        type: string
+        required: false
     offset:
         description: offset in query
         in: query
@@ -522,6 +532,25 @@ paths:
                 200:
                     schema:
                         $ref: '#/definitions/TestingStatistics'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+    /qc_cos/config:
+        get:
+            summary: 腾讯云配置
+            description: 腾讯云配置
+            tags: [Config]
+            operationId: get_qc_cos_config
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/qcos_path_in_query'
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/QCOSConfig'
                 default:
                     description: Unexpected error
                     schema:

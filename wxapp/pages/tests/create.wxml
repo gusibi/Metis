@@ -23,6 +23,17 @@
                     </view>
                 </view>
             </view>
+            <view class="weui-cells__title">选择图片</view>
+            <view class="weui-cells weui-cells_after-title">
+                <view class="weui-cell">
+                    <view class="weui-cell__bd">
+                        <text class="weui-text" name="image" placeholder="请输入描述"/>
+                    </view>
+                    <view class="weui-uploader__input-box">
+                        <view class="weui-uploader__input" bindtap="uploadToCos"></view>
+                    </view>
+                </view>
+            </view>
 
             <view class="weui-cells__title">测试时间</view>
             <view class="weui-cells weui-cells_after-title">

@@ -1,1 +1,7 @@
 /* list.wxss */
+.weui-panel {
+  background-color: #FFFFFF;
+  margin-top: 0px;
+  position: relative;
+  overflow: hidden;
+}

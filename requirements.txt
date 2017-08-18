@@ -1,5 +1,3 @@
-Flask
-Jinja2
-Flask-RESTful
 jsonschema
 six
+git+https://github.com/gusibi/cos-python-sdk-v4.git@master

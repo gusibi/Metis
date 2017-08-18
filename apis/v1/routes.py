@@ -16,6 +16,7 @@ from .api.self_testings import SelfTestings
 from .api.tests_id import TestsId
 from .api.tests_id_questions import TestsIdQuestions
 from .api.tests_id_statistics import TestsIdStatistics
+from .api.qc_cos_config import QcCosConfig
 
 
 routes = [
@@ -27,4 +28,5 @@ routes = [
     dict(resource=TestsId.as_view(), urls=['/tests/<id>'], endpoint='tests_id'),
     dict(resource=TestsIdQuestions.as_view(), urls=['/tests/<id>/questions'], endpoint='tests_id_questions'),
     dict(resource=TestsIdStatistics.as_view(), urls=['/tests/<id>/statistics'], endpoint='tests_id_statistics'),
+    dict(resource=QcCosConfig.as_view(), urls=['/qc_cos/config'], endpoint='qc_cos_config'),
 ]

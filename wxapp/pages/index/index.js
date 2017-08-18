@@ -23,7 +23,7 @@ Page({
             },
             {
                 id: '2',
-                image: '../../style/images/tooopen_sy_143912755726.jpg',
+                image: 'https://momo-1254035985.cossh.myqcloud.com/xrzeti/tmp_1237661039o6zAJs8yX0DlIRvL_IH8yDi5Kt1cab774e694e74f21a9f17d172edf3358c.jpg',
                 title: '标题二',
                 description: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
             }
