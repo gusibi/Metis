@@ -1,2 +1,103 @@
 <!--update.wxml-->
-<text>update.wxml</text>
+<view class="page" xmlns:wx="http://www.w3.org/1999/xhtml">
+    <view class="page__hd">
+        <view class="page__title">修改测试</view>
+    </view>
+    <view class="page__bd">
+        <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{error_msg}}</view>
+        <form bindsubmit="formSubmit" bindreset="formReset">
+            <view class="weui-cells__title">题目</view>
+            <view class="weui-cells weui-cells_after-title">
+                <view class="weui-cell weui-cell_input">
+                    <view class="weui-cell__bd">
+                        <input class="weui-input" name="title" value="{{test.title}}" placeholder="请输入题目" />
+                    </view>
+                </view>
+            </view>
+
+            <view class="weui-cells__title">题目描述</view>
+            <view class="weui-cells weui-cells_after-title">
+                <view class="weui-cell">
+                    <view class="weui-cell__bd">
+                        <textarea class="weui-textarea" name="description" placeholder="请输入描述" value="{{test.description}}" style="height: 3.3em" />
+                        <view class="weui-textarea-counter">0/200</view>
+                    </view>
+                </view>
+            </view>
+            <view class="weui-cells__title">图片</view>
+            <view class="weui-cells weui-cells_after-title">
+                <view class="weui-cell">
+                    <view class="weui-cell__bd" hidden="true">
+                        <input class="weui-input" name="image" value="{{test.image}}" placeholder="请输入题目"/>
+                    </view>
+                    <view class="weui-uploader__files" id="uploaderFiles">
+                        <block wx:for="{{files}}" wx:key="*this" wx:for-index="idx">
+                            <view class="weui-uploader__file" bindtap="previewImage" id="{{idx}}" bindlongpress="deleteImage">
+                                <image class="weui-uploader__img" src="{{item}}" mode="aspectFill" />
+                            </view>
+                        </block>
+                        <view class="weui-uploader__file weui-uploader__file_status" wx:if="{{files.length <1 }}">
+                            <image class="weui-uploader__img" src="../../style/images/pic_160.png" mode="aspectFill" />
+                            <view class="weui-uploader__file-content" wx:if="{{upload_fail}}">
+                                <icon type="warn" size="23" color="#F43530"></icon>
+                            </view>
+                            <view class="weui-uploader__file-content" wx:if="{{upload_progress > 0 }}">{{upload_progress}}%</view>
+                        </view>
+                    </view>
+                    <view class="weui-uploader__input-box" wx:if="{{files.length <1 }}">
+                        <view class="weui-uploader__input" bindtap="uploadToCos"></view>
+                    </view>
+
+                </view>
+            </view>
+
+            <view class="weui-cells__title">测试时间</view>
+            <view class="weui-cells weui-cells_after-title">
+                <view class="weui-cell weui-cell_input">
+                    <view class="weui-cell__hd">
+                        <view class="weui-label">开始时间</view>
+                    </view>
+                    <view class="weui-cell__bd">
+                        <picker mode="date" name="start_date" value="{{date}}" start="2015-09-01" end="2017-09-01" bindchange="bindStartDateChange">
+                            <view class="weui-input">{{test.start_date}}</view>
+                        </picker>
+                    </view>
+                    <view class="weui-cell__bd">
+                        <picker mode="time" name="start_time" value="{{time}}" start="09:01" end="21:01" bindchange="bindStartTimeChange">
+                            <view class="weui-input">{{test.start_time}}</view>
+                        </picker>
+                    </view>
+                </view>
+                <view class="weui-cell weui-cell_input">
+                    <view class="weui-cell__hd">
+                        <view class="weui-label">结束时间</view>
+                    </view>
+                    <view class="weui-cell__bd">
+                        <picker mode="date" name="end_date" value="{{date}}" start="2015-09-01" end="2017-09-01" bindchange="bindEndDateChange">
+                            <view class="weui-input">{{test.end_date}}</view>
+                        </picker>
+                    </view>
+                    <view class="weui-cell__bd">
+                        <picker mode="time" name="end_time" value="{{time}}" start="09:01" end="21:01" bindchange="bindEndTimeChange">
+                            <view class="weui-input">{{test.end_time}}</view>
+                        </picker>
+                    </view>
+                </view>
+            </view>
+
+            <view class="weui-cells__title">备注</view>
+            <view class="weui-cells weui-cells_after-title">
+                <view class="weui-cell">
+                    <view class="weui-cell__bd">
+                        <textarea class="weui-textarea" name="remark" placeholder="这里是备注，备备备备注" value="{{test.remar}}" style="height: 3.3em" />
+                        <view class="weui-textarea-counter">0/200</view>
+                    </view>
+                </view>
+            </view>
+
+            <view class="weui-btn-area">
+                <button class="weui-btn" type="primary" formType="submit">确定</button>
+            </view>
+        </form>
+    </view>
+</view>

@@ -113,6 +113,10 @@ definitions:
                 type: string
             description:
                 type: string
+            start_time:
+                type: string
+            end_time:
+                type: string
             creator:
                 $ref: '#/definitions/Account'
             created_time:
@@ -131,6 +135,10 @@ definitions:
             title:
                 type: string
             description:
+                type: string
+            start_time:
+                type: string
+            end_time:
                 type: string
             creator:
                 $ref: '#/definitions/Account'
@@ -365,6 +373,24 @@ paths:
             security:
                 - OAuth2: [open]
     /self/tests/{id}:
+        get:
+            summary: 创建者获取测试题
+            description: 创建者获取测试题
+            tags: [SELF]
+            operationId: get_test_questions
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/id_in_path'
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/TestDetail'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
         put:
             summary: 修改测试
             description: 修改测试（发布|撤销）

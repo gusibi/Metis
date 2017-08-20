@@ -23,15 +23,30 @@
                     </view>
                 </view>
             </view>
-            <view class="weui-cells__title">选择图片</view>
+            <view class="weui-cells__title">图片</view>
             <view class="weui-cells weui-cells_after-title">
                 <view class="weui-cell">
-                    <view class="weui-cell__bd">
-                        <text class="weui-text" name="image" placeholder="请输入描述"/>
+                    <view class="weui-cell__bd" hidden="true">
+                        <input class="weui-input" name="image" value="{{files[0]}}" placeholder="请输入题目"/>
                     </view>
-                    <view class="weui-uploader__input-box">
+                    <view class="weui-uploader__files" id="uploaderFiles">
+                        <block wx:for="{{files}}" wx:key="*this" wx:for-index="idx">
+                            <view class="weui-uploader__file" bindtap="previewImage" id="{{idx}}" bindlongpress="deleteImage">
+                                <image class="weui-uploader__img" src="{{item}}" mode="aspectFill" />
+                            </view>
+                        </block>
+                        <view class="weui-uploader__file weui-uploader__file_status" wx:if="{{files.length <1 }}">
+                            <image class="weui-uploader__img" src="../../style/images/pic_160.png" mode="aspectFill" />
+                            <view class="weui-uploader__file-content" wx:if="{{upload_fail}}">
+                                <icon type="warn" size="23" color="#F43530"></icon>
+                            </view>
+                            <view class="weui-uploader__file-content" wx:if="{{upload_progress > 0 }}">{{upload_progress}}%</view>
+                        </view>
+                    </view>
+                    <view class="weui-uploader__input-box" wx:if="{{files.length <1 }}">
                         <view class="weui-uploader__input" bindtap="uploadToCos"></view>
                     </view>
+
                 </view>
             </view>
 

@@ -2,13 +2,18 @@
 
 from sanic.response import text
 
+from apis.models.test import Test
+from apis.exception import NotFound
+
 from . import Resource
-from .. import schemas
 
 
 class TestsId(Resource):
 
     async def get(self, request, id):
         print(request.headers)
+        test = Test.get(_id=id)
+        if not test or test.get('status') != 'published':
+            raise NotFound('test_not_found')
 
-        return {'id': 'something', 'title': 'something', 'description': 'something'}, 200, None
+        return test, 200

@@ -9,10 +9,15 @@ Page({
    */
     data: {
         showTopTips: false,
-        start_date: "2016-09-01",
-        start_time: "12:01",
-        end_date: "2016-09-01",
-        end_time: "12:31"
+        start_date: "2012-01-01",
+        start_time: "00:00",
+        end_date: "2020-12-30",
+        end_time: "23:59",
+        files: [],
+        test_image: '',
+        upload_fail: false,
+        upload_progress: 0,
+        upload_res: {}
     },
     showTopTips: function () {
         var that = this;
@@ -49,12 +54,29 @@ Page({
             end_time: e.detail.value
         })
     },
+    previewImage: function(e){
+        var that = this;
+        var files = that.data.files;
+        // 预览图片
+        var image = files[e.currentTarget.id]
+        console.log(image)
+    },
+    deleteImage: function(e){
+        // 长按删除图片
+        var that = this;
+        var files = that.data.files;
+        files.splice(e.currentTarget.id, 1);
+        that.setData({
+            files: files
+        })
+    },
     formSubmit: function (e) {
         var that = this;
         console.log('form发生了submit事件，携带数据为：', e.detail.value)
         var form_data = e.detail.value;
         var params = {
             'title': form_data.title,
+            'image': form_data.image,
             'description': form_data.description,
             'remark': form_data.remark,
             'start_time': form_data.start_date + ' ' + form_data.start_time,
@@ -76,7 +98,7 @@ Page({
                         icon: 'success'
                     });
                     wx.redirectTo({
-                        url: '/pages/self_tests/test_detail?test_id=' + res.data.id,
+                        url: '/pages/self_tests/test_detail?test_id=' + res.data.id + '&title=' + res.data.title,
                     });
                 } else {
                     // 提示错误信息
@@ -98,8 +120,6 @@ Page({
     uploadToCos: function () {
         var that = this;
 
-        console.log(this)
-
         // 选择上传的图片
         wx.chooseImage({
             success: function (res) {
@@ -112,9 +132,10 @@ Page({
                 fileName = fileName[2]
 
                 // 文件上传cos
-                upload(filePath, fileName, that.data.jwt.access_token)
+                upload(filePath, fileName, that);
             }
         })
+        // console.log()
     },
   /**
    * 生命周期函数--监听页面加载
