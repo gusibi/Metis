@@ -3,6 +3,7 @@
 import base64
 import time
 import jwt
+from jwt.exceptions import ExpiredSignatureError
 from weixin.helper import smart_str
 
 from apis.models.oauth import Account, OAuth2Client
@@ -117,9 +118,12 @@ def verify_basic_token(token):
 
 
 def verify_jwt_token(token):
-    payload = jwt.decode(token, 'secret',
-                         audience=Config.AUDIENCE,
-                         algorithms=['HS256'])
+    try:
+        payload = jwt.decode(token, 'secret',
+                             audience=Config.AUDIENCE,
+                             algorithms=['HS256'])
+    except ExpiredSignatureError:
+        return False, token
     if payload:
         return True, ObjectModel.object_from_dictionary(payload)
     return False, token

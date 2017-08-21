@@ -10,6 +10,9 @@ consumes:
 produces:
     - application/json
 definitions:
+    datetime:
+        type: string
+        format: datetime
     Authentications:
         description: 用户详细授权数据
         properties:
@@ -67,9 +70,7 @@ definitions:
             creator:
                 $ref: '#/definitions/Account'
             created_time:
-                type: string
-                description: 测试时间
-                format: datetime
+                $ref: '#/definitions/datetime'
     CreateTest:
         required:
             - title
@@ -82,9 +83,9 @@ definitions:
             description:
                 type: string
             start_time:
-                type: string
+                $ref: '#/definitions/datetime'
             end_time:
-                type: string
+                $ref: '#/definitions/datetime'
     UpdateTest:
         properties:
             image:
@@ -94,9 +95,9 @@ definitions:
             description:
                 type: string
             start_time:
-                type: string
+                $ref: '#/definitions/datetime'
             end_time:
-                type: string
+                $ref: '#/definitions/datetime'
             status:
                 type: string
     Test:
@@ -114,14 +115,13 @@ definitions:
             description:
                 type: string
             start_time:
-                type: string
+                $ref: '#/definitions/datetime'
             end_time:
-                type: string
+                $ref: '#/definitions/datetime'
             creator:
                 $ref: '#/definitions/Account'
             created_time:
-                type: string
-                format: datetime
+                $ref: '#/definitions/datetime'
     TestDetail:
         required:
             - id
@@ -136,15 +136,16 @@ definitions:
                 type: string
             description:
                 type: string
+            status:
+                type: string
             start_time:
-                type: string
+                $ref: '#/definitions/datetime'
             end_time:
-                type: string
+                $ref: '#/definitions/datetime'
             creator:
                 $ref: '#/definitions/Account'
             created_time:
-                type: string
-                format: datetime
+                $ref: '#/definitions/datetime'
     Option:
         required:
             - option
