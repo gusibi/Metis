@@ -2,6 +2,7 @@
 import copy
 
 from six import with_metaclass
+from bson.objectid import ObjectId
 from pymongo import MongoClient
 from pymongo import ReturnDocument
 from apis.settings import Config
@@ -58,7 +59,6 @@ class Model(with_metaclass(ModelMetaclass, object)):
 
     @classmethod
     def get(cls, _id=None, **kwargs):
-        from bson.objectid import ObjectId
         if _id:
             doc = cls.collection.find_one({'_id': ObjectId(_id)})
         else:
@@ -136,8 +136,11 @@ class Model(with_metaclass(ModelMetaclass, object)):
         return results
 
     @classmethod
-    def delete_one(cls, **filter):
-        cls.collection.delete_one(filter)
+    def delete_one(cls, _id=None, **filter):
+        if _id:
+            cls.collection.delete_one({'_id': ObjectId(_id)})
+        else:
+            cls.collection.delete_one(filter)
 
     @classmethod
     def delete_many(cls, **filter):

@@ -108,6 +108,9 @@ definitions:
                 $ref: '#/definitions/datetime'
             status:
                 type: string
+                enum:
+                    - published
+                    - withdraw
     Test:
         required:
             - id
@@ -417,6 +420,24 @@ paths:
                 200:
                     schema:
                         $ref: '#/definitions/Test'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+        delete:
+            summary: 删除测试
+            description: 删除测试,只能删除未发布的测试
+            tags: [SELF]
+            operationId: delete_test
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/id_in_path'
+            responses:
+                204:
+                    schema:
+                        $ref: '#/definitions/Success'
                 default:
                     description: Unexpected error
                     schema:
