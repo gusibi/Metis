@@ -5,16 +5,24 @@ from bson.objectid import ObjectId
 from apis.models.test import Test
 from apis.verification import current_account
 from apis.exception import NotFound, BadRequest
+from apis.helpers import format_result, split_datetime
 
 from . import Resource
 
 
 class SelfTestsId(Resource):
 
+    @format_result(fields=['created_time', 'start_time', 'end_time'])
     async def get(self, request, id):
         test = Test.get(_id=id)
         if not test or test.get('creator_id') != current_account.id:
             raise NotFound('test_not_found')
+        _start_time = test.get('start_time')
+        if _start_time:
+            test['date_start'], test['time_start'] = split_datetime(_start_time)
+        _end_time = test.get('end_time')
+        if _end_time:
+            test['date_end'], test['time_end'] = split_datetime(_end_time)
         return test, 200
 
     async def put(self, request, id):

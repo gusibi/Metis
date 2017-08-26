@@ -47,8 +47,7 @@ definitions:
             authentications:
                 $ref: '#/definitions/Authentications'
             created_time:
-                format: datetime
-                type: string
+                $ref: '#/definitions/datetime'
     Testing:
         required:
             - id
@@ -146,6 +145,14 @@ definitions:
             title:
                 type: string
             description:
+                type: string
+            date_start:
+                type: string
+            date_end:
+                type: string
+            time_start:
+                type: string
+            time_end:
                 type: string
             status:
                 type: string

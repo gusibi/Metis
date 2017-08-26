@@ -63,7 +63,7 @@ class Model(with_metaclass(ModelMetaclass, object)):
             doc = cls.collection.find_one({'_id': ObjectId(_id)})
         else:
             doc = cls.collection.find_one(kwargs)
-        if doc.get('_id', None):
+        if doc and doc.get('_id', None):
             doc['id'] = str(doc['_id'])
         return doc
 
