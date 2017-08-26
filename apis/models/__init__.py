@@ -123,6 +123,9 @@ class Model(with_metaclass(ModelMetaclass, object)):
         result = cls.collection.find_one_and_update(filter, update=update,
                                                     return_document=return_document,
                                                     **kwargs)
+        _id = result.get('_id')
+        if _id:
+            result['id'] = str(_id)
         return result
 
     @classmethod

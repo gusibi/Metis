@@ -7,7 +7,6 @@ from apis.verification import current_account
 from apis.exception import NotFound, BadRequest
 
 from . import Resource
-from .. import schemas
 
 
 class SelfTestsId(Resource):
@@ -30,7 +29,7 @@ class SelfTestsId(Resource):
         test = Test.get(_id=id)
         if not test or test.get('creator_id') != current_account.id:
             raise NotFound('test_not_found')
-        if test.status == 'published':
+        if test.get('status') == 'published':
             raise BadRequest('invalid_status')
         Test.delete_one(_id=id)
         return {}, 204
