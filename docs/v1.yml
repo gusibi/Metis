@@ -80,8 +80,12 @@ definitions:
                 type: string
             title:
                 type: string
+                minLength: 8
+                maxLength: 128
             description:
                 type: string
+                minLength: 16
+                maxLength: 256
             start_time:
                 $ref: '#/definitions/datetime'
             end_time:
@@ -92,8 +96,12 @@ definitions:
                 type: string
             title:
                 type: string
+                minLength: 8
+                maxLength: 128
             description:
                 type: string
+                minLength: 16
+                maxLength: 256
             start_time:
                 $ref: '#/definitions/datetime'
             end_time:
