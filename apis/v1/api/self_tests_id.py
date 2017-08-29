@@ -5,7 +5,7 @@ from bson.objectid import ObjectId
 from apis.models.test import Test
 from apis.verification import current_account
 from apis.exception import NotFound, BadRequest
-from apis.helpers import format_result, split_datetime
+from apis.helpers import format_result, split_datetime, str_to_time
 
 from . import Resource
 
@@ -29,6 +29,12 @@ class SelfTestsId(Resource):
         test = Test.get(_id=id)
         if not test or test.get('creator_id') != current_account.id:
             raise NotFound('test_not_found')
+        start_time = request.json.get('start_time')
+        if start_time:
+            request.json['start_time'] = str_to_time(start_time)
+        end_time = request.json.get('end_time')
+        if end_time:
+            request.json['end_time'] = str_to_time(end_time)
         result = Test.find_one_and_update(filter={'_id': ObjectId(id)},
                                           update={'$set': request.json})
         return result, 200

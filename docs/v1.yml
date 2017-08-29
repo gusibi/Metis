@@ -89,6 +89,8 @@ definitions:
                 $ref: '#/definitions/datetime'
             end_time:
                 $ref: '#/definitions/datetime'
+            remark:
+                type: string
     UpdateTest:
         properties:
             image:
@@ -101,6 +103,8 @@ definitions:
                 type: string
                 minLength: 16
                 maxLength: 256
+            remark:
+                type: string
             start_time:
                 $ref: '#/definitions/datetime'
             end_time:
@@ -160,6 +164,8 @@ definitions:
                 $ref: '#/definitions/datetime'
             end_time:
                 $ref: '#/definitions/datetime'
+            remark:
+                type: string
             creator:
                 $ref: '#/definitions/Account'
             created_time:
@@ -536,6 +542,26 @@ paths:
                         type: array
                         items:
                             $ref: '#/definitions/Testing'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+    /tests/handpick:
+        get:
+            summary: 首页测试列表
+            description: 首页测试列表
+            tags: [TESTS]
+            operationId: get_test_handpick
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+            responses:
+                200:
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/definitions/Test'
                 default:
                     description: Unexpected error
                     schema:

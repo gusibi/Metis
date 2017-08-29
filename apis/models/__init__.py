@@ -27,10 +27,6 @@ class ObjectModel(object):
 
     def __repr__(self):
         return str(self)
-        # if six.PY2:
-        #     return six.text_type(self).encode('utf8')
-        # else:
-        #     return self.encode('utf8')
 
     def __str__(self):
         return self.__unicode__()
@@ -68,11 +64,11 @@ class Model(with_metaclass(ModelMetaclass, object)):
         return doc
 
     @classmethod
-    def find(cls, filter=None, projection=None, skip=0, limit=20, sort=None, asc=True, **kwargs):
-         if sort:
+    def find(cls, filter=None, projection=None, skip=0, limit=20, sorts=None, **kwargs):
+         if sorts:
              docs = cls.collection.find(filter=filter,
                                         projection=projection,
-                                        **kwargs).skip(skip).limit(limit).sort({sort: 1 if asc else -1})
+                                        **kwargs).skip(skip).limit(limit).sort(sorts)
          else:
              docs = cls.collection.find(filter=filter,
                                         projection=projection,
