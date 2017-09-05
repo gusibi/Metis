@@ -12,8 +12,6 @@ from . import Resource
 class SelfTestsTestIdQuestionsId(Resource):
 
     async def post(self, request, test_id, id):
-        print(request.json)
-        print(request.headers)
         test = Test.get(_id=test_id)
         if not test or test.get('creator_id') != current_account.id:
             raise NotFound('test_not_found')

@@ -181,7 +181,10 @@ definitions:
             - option
             - is_checked
         properties:
-            value:
+            index:
+                type: integer
+                format: int32
+            option:
                 type: string
             is_checked:
                 type: boolean
@@ -201,6 +204,8 @@ definitions:
             - title
             - options
         properties:
+            id:
+                type: string
             title:
                 type: string
             type:

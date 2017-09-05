@@ -13,7 +13,6 @@ from .. import schemas
 class SelfTestsIdQuestions(Resource):
 
     async def get(self, request, id):
-        print(request.headers)
         test = Test.get(_id=id)
         if not test or test.get('creator_id') != current_account.id:
             raise NotFound('account_not_found')
