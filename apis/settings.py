@@ -16,8 +16,9 @@ except:
         MONGO_MASTER_HOST = environ.get('MONGO_PORT_27017_TCP_ADDR', '127.0.0.1')
         MONGO_MASTER_PORT = environ.get('MONGO_PORT_27017_TCP_PORT', '27017')
         MONGO_DATABASE = environ.get('MONGO_DATABASE', 'metis')
-        MONGO_MASTER_URL = 'mongodb://%s:%s' % (MONGO_MASTER_HOST,
-                                                MONGO_MASTER_PORT)
+        MONGO_MASTER_URL = 'mongodb://%s:%s/%s' % (MONGO_MASTER_HOST,
+                                                   MONGO_MASTER_PORT,
+                                                   MONGO_DATABASE)
 
         APP_TRANSPORT = environ.get('APP_TRANSPORT', 'http')
         APP_DOMAIN = environ.get('APP_DOMAIN', 'http://metis.gusibi.mobi')

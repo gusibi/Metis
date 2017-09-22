@@ -15,7 +15,7 @@ class SelfTests(Resource):
         if status:
             filter['status'] = status
         offset, limit = get_offset_limit(request.raw_args)
-        tests = Test.find(filter=filter, skip=offset, limit=limit)
+        tests = Test.objects.raw(filter)
         return tests, 200
 
     async def post(self, request):

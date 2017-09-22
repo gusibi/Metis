@@ -4,10 +4,12 @@ from hashlib import sha256
 from binascii import hexlify
 from datetime import datetime
 
-from apis.models import Model
+from pymongo import TEXT
+from pymongo.operations import IndexModel
+from pymodm import MongoModel, EmbeddedMongoModel, fields
 
 
-__all__ = ['Account', 'OAuth2Client', 'OAuth2Token']
+__all__ = ['Account', 'OAuth2Client']
 
 
 class HasedPassword(object):
@@ -40,7 +42,7 @@ class HasedPassword(object):
         return bcrypt.hashpw(plain, bcrypt.gensalt(cls.HASH_LOG_ROUNDS))
 
 
-class Account(Model):
+class Account(MongoModel):
 
     '''
     帐号
@@ -52,10 +54,18 @@ class Account(Model):
     :param status: 状态(active|发布|forbidden)
     '''
 
-    __collection__ = 'account'
-    __default_fields__ = {
-        'created_time': datetime.utcnow()
-    }
+    collection_name = 'account'
+
+    id = fields.ObjectIdField(primary_key=True, required=True)
+    username = fields.CharField(required=True)
+    password = fields.CharField(required=True)
+    authentications = fields.DictField()
+    created_time = fields.DateTimeField(default=datetime.utcnow())
+    updated_time = fields.DateTimeField()
+
+    class Meta:
+        # Text index on content can be used for text search.
+        indexes = [IndexModel([('username', TEXT)])]
 
     @classmethod
     def get_by_wxapp(cls, openid):
@@ -63,17 +73,12 @@ class Account(Model):
         return account
 
 
-class OAuth2Token(Model):
+class OAuth2Client(MongoModel):
 
-    __collection__ = 'oauth_token'
-    __default_fields__ = {
-        'created_time': datetime.utcnow()
-    }
+    collection_name = 'oauth2_client'
 
-
-class OAuth2Client(Model):
-
-    __collection__ = 'oauth2_client'
-    __default_fields__ = {
-        'created_time': datetime.utcnow()
-    }
+    client_id = fields.CharField(primary_key=True, required=True)
+    account_id = fields.ObjectIdField(required=True)
+    secret = fields.CharField(required=True)
+    scopes = fields.ListField(required=True)
+    created_time = fields.DateTimeField(default=datetime.utcnow())
