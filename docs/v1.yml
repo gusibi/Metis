@@ -246,6 +246,18 @@ definitions:
                 type: array
                 items:
                     $ref: '#/definitions/OptionWithAnswer'
+    AnswerQuestion:
+        required:
+            - question_id
+            - options
+        properties:
+            question_id:
+                type: string
+            options:
+                type: array
+                items:
+                    type: integer
+                    format: int32
     Distribution:
         properties:
             value:
@@ -487,11 +499,11 @@ paths:
             summary: 给测试添加问题
             description: 给测试添加问题，发布后的测试不能修改
             tags: [SELF]
-            operationId: reset_password
+            operationId: create_question
             parameters:
                 - $ref: '#/parameters/AccessToken'
                 - $ref: '#/parameters/id_in_path'
-                - name: reset_password
+                - name: create_question
                   in: body
                   required: true
                   schema:
@@ -507,16 +519,16 @@ paths:
             security:
                 - OAuth2: [open]
     /self/tests/{test_id}/questions/{id}:
-        post:
-            summary: 给测试添加问题
-            description: 给测试添加问题，发布后的测试不能修改
+        put:
+            summary: 修改测试问题
+            description: 修改问题，发布后的测试不能修改
             tags: [SELF]
-            operationId: reset_password
+            operationId: update_test_question
             parameters:
                 - $ref: '#/parameters/AccessToken'
                 - $ref: '#/parameters/test_id_in_path'
                 - $ref: '#/parameters/id_in_path'
-                - name: reset_password
+                - name: update_question
                   in: body
                   required: true
                   schema:
@@ -607,6 +619,30 @@ paths:
                         type: array
                         items:
                             $ref: '#/definitions/Question'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+    /tests/{id}/answers:
+        post:
+            summary: 答题
+            description: 回答测试问题
+            tags: [TESTING]
+            operationId: answer_test
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/id_in_path'
+                - name: answer_test
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/AnswerQuestion'
+            responses:
+                201:
+                    schema:
+                        $ref: '#/definitions/Success'
                 default:
                     description: Unexpected error
                     schema:

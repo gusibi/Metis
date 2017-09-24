@@ -4,10 +4,10 @@ from hashlib import sha256
 from binascii import hexlify
 from datetime import datetime
 
-from pymongo import TEXT
-from pymongo.operations import IndexModel
-from pymodm import MongoModel, EmbeddedMongoModel, fields
-
+from mongoengine import EmbeddedDocument, Document
+from mongoengine.fields import (StringField, DateTimeField,
+                                ObjectIdField, DictField,
+                                ListField, EmbeddedDocumentField)
 
 __all__ = ['Account', 'OAuth2Client']
 
@@ -42,7 +42,14 @@ class HasedPassword(object):
         return bcrypt.hashpw(plain, bcrypt.gensalt(cls.HASH_LOG_ROUNDS))
 
 
-class Account(MongoModel):
+class Authentications(EmbeddedDocument):
+
+    account_id = ObjectIdField(primary_key=True)
+    wxapp = StringField()
+    mobile = StringField()
+
+
+class Account(Document):
 
     '''
     帐号
@@ -54,18 +61,19 @@ class Account(MongoModel):
     :param status: 状态(active|发布|forbidden)
     '''
 
-    collection_name = 'account'
+    meta = {
+        'collection': 'account',
+        'indexes': [
+            '$username',  # text index
+        ]
+    }
 
-    id = fields.ObjectIdField(primary_key=True, required=True)
-    username = fields.CharField(required=True)
-    password = fields.CharField(required=True)
-    authentications = fields.DictField()
-    created_time = fields.DateTimeField(default=datetime.utcnow())
-    updated_time = fields.DateTimeField()
-
-    class Meta:
-        # Text index on content can be used for text search.
-        indexes = [IndexModel([('username', TEXT)])]
+    id = ObjectIdField(primary_key=True, required=True)
+    username = StringField(required=True)
+    password = StringField(required=True)
+    authentications = EmbeddedDocumentField(Authentications)
+    created_time = DateTimeField(default=datetime.utcnow())
+    updated_time = DateTimeField()
 
     @classmethod
     def get_by_wxapp(cls, openid):
@@ -73,12 +81,12 @@ class Account(MongoModel):
         return account
 
 
-class OAuth2Client(MongoModel):
+class OAuth2Client(Document):
 
-    collection_name = 'oauth2_client'
+    meta = {'collection': 'oauth2_client'}
 
-    client_id = fields.CharField(primary_key=True, required=True)
-    account_id = fields.ObjectIdField(required=True)
-    secret = fields.CharField(required=True)
-    scopes = fields.ListField(required=True)
-    created_time = fields.DateTimeField(default=datetime.utcnow())
+    client_id = StringField(primary_key=True, required=True)
+    account_id = ObjectIdField(required=True)
+    secret = StringField(required=True)
+    scopes = ListField(required=True)
+    created_time = DateTimeField(default=datetime.utcnow())

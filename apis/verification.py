@@ -32,8 +32,8 @@ def get_authorization(request):
 
 
 def verify_client(client_id, secret):
-    client = OAuth2Client.get(client_id=smart_str(client_id),
-                              secret=smart_str(secret))
+    client = OAuth2Client.objects(client_id=smart_str(client_id),
+                                  secret=smart_str(secret))
     if client:
         return True, client.get('scopes', [])
     return False, []

@@ -1,11 +1,11 @@
-from pymodm import connect
+from mongoengine import connect
 
 from apis.settings import Config
 
 
 # Establish a connection to the database.
 print(Config.MONGO_MASTER_URL)
-connect(Config.MONGO_MASTER_URL)
+connect(Config.MONGO_DATABASE)
 
 
 class ObjectModel(object):

@@ -11,5 +11,8 @@ class TestsHandpick(Resource):
 
     async def get(self, request):
         filter = {'status': 'published'}
-        tests = Test.find(filter=filter, sorts=[('created_time', 1)])
+        tests = Test.objects(**filter).order_by('-created_time')
+        print(tests)
+        for test in tests:
+            print(test.id, test.title, test.creator)
         return tests, 200

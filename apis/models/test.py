@@ -1,40 +1,51 @@
 #! -*- coding: utf-8 -*-
 from datetime import datetime
 
-from pymongo import TEXT, DESCENDING, ASCENDING
-from pymongo.operations import IndexModel
-from pymodm import MongoModel, EmbeddedMongoModel, fields
+from weixin.helper import smart_str
+
+from mongoengine import EmbeddedDocument, Document
+from mongoengine.fields import (StringField, DateTimeField,
+                                ObjectIdField, DictField, IntField,
+                                ListField, ReferenceField)
 
 
-class Question(EmbeddedMongoModel):
+class Question(Document):
 
     '''
     题目：
     :param _id: 问题 ID
     :param title: 题目
     :param test_id:  所属测试 ID
+    :param number: 第几题
     :param type: 题目类型 'single_choice|multiple_choice'
     :param options: 选项
                 [
-                {'value': '这是第一个选项', 'is_checked': True},
-                {'value': '这是第二个选项', 'is_checked': False},
+                {'value': '这是第一个选项', 'index': 0, 'is_checked': True},
+                {'value': '这是第二个选项', 'index': 1, 'is_checked': False},
                 ]
     :param index: 1,
     '''
 
-    collection_name = 'question'
+    def __getattribute__(self, name):
+        if name == 'id':
+            id = super(Question, self).__getattribute__(name)
+            return smart_str(id)
+        return super(Question, self).__getattribute__(name)
 
-    id = fields.ObjectIdField(primary_key=True, required=True)
-    title = fields.CharField(required=True)
-    type = fields.CharField(required=True, default='single_choice')
-    number = fields.IntegerField(required=True, default=0)
-    options = fields.ListField(required=True, default=[])
-    created_time = fields.DateTimeField(default=datetime.utcnow())
-    updated_time = fields.DateTimeField()
+    meta = {"collection_name": 'question'}
+
+    id = ObjectIdField(primary_key=True, required=True)
+    test_id = StringField(required=True)
+    title = StringField(required=True)
+    type = StringField(required=True, default='single_choice')
+    number = IntField(required=True, default=0)
+    options = ListField(required=True, default=[])
+    created_time = DateTimeField(default=datetime.utcnow())
+    updated_time = DateTimeField()
 
 
 
-class Test(MongoModel):
+class Test(Document):
 
     '''
     测试
@@ -49,34 +60,58 @@ class Test(MongoModel):
     :param created_time: 创建时间
     '''
 
-    collection_name = 'test'
+    def __getattribute__(self, name):
+        if name == 'id':
+            id = super(Test, self).__getattribute__(name)
+            return smart_str(id)
+        return super(Test, self).__getattribute__(name)
 
-    id = fields.ObjectIdField(primary_key=True, required=True)
-    creator_id = fields.ObjectIdField(required=True)
-    title = fields.CharField(required=True)
-    description = fields.CharField(required=True)
-    remark = fields.CharField()
-    status = fields.CharField(required=True, default='draft')
-    total_score = fields.IntegerField()
-    participate_number = fields.IntegerField(required=True, default=0)
-    start_time = fields.DateTimeField()
-    end_time = fields.DateTimeField()
-    created_time = fields.DateTimeField(default=datetime.utcnow())
-    updated_time = fields.DateTimeField()
-    questions = fields.EmbeddedDocumentListField(Question, default=[])
+    id = ObjectIdField(primary_key=True, required=True)
+    creator_id = StringField(required=True)
+    title = StringField(required=True)
+    description = StringField(required=True)
+    image = StringField()
+    remark = StringField()
+    status = StringField(required=True, default='draft')
+    total_score = IntField()
+    participate_number = IntField(required=True, default=0)
+    start_time = DateTimeField()
+    end_time = DateTimeField()
+    created_time = DateTimeField(default=datetime.utcnow())
+    updated_time = DateTimeField()
+    # questions = ReferenceField('Question')
 
-    class Meta:
-        # Text index on title can be used for text search.
-        indexes = [
-            IndexModel([('title', TEXT)]),
-            IndexModel([('creator_id', TEXT),
-                        ('status', TEXT)]),
-            IndexModel([('participate_number', DESCENDING),
-                        ('status', TEXT)], name='participate_status')
+    meta = {
+        "collection_name": 'test',
+        'indexes': [
+            'title',
+            '$title',  # text index
+            ('creator_id', 'status', '-created_time'),
+            ('status', '-participate_number')
         ]
+    }
 
     @property
     def creator(self):
-        pass
+        return {"id": self.creator_id}
 
 
+class Answer(Document):
+    '''
+    测试
+    :param id: 答案ID
+    :param account_id: 用户ID
+    :param test_id: 测试 id
+    :param created_time: 开始答题时间
+    :param updated_time: 最后答题时间
+    :param answers: 答案 {question_id: [options]}
+    '''
+
+    meta = {"collection_name": 'answer'}
+
+    # id = ObjectIdField(primary_key=True, default=)
+    test_id = StringField(required=True)
+    account_id = StringField(required=True)
+    answers = DictField(default={})
+    created_time = DateTimeField(default=datetime.utcnow())
+    updated_time = DateTimeField()
