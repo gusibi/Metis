@@ -1,4 +1,5 @@
 #! -*- coding: utf-8 -*-
+
 from datetime import datetime
 
 from weixin.helper import smart_str
@@ -7,6 +8,8 @@ from mongoengine import EmbeddedDocument, Document
 from mongoengine.fields import (StringField, DateTimeField,
                                 ObjectIdField, DictField, IntField,
                                 ListField, ReferenceField)
+
+from apis.helpers import split_datetime
 
 
 class Question(Document):
@@ -94,6 +97,38 @@ class Test(Document):
     @property
     def creator(self):
         return {"id": self.creator_id}
+
+    def get_start_time_value(self):
+        if self.start_time:
+            date_start, time_start = split_datetime(self.start_time)
+            return date_start, time_start
+        return None, None
+
+    @property
+    def time_start(self):
+        _, time_start = self.get_start_time_value()
+        return time_start
+
+    @property
+    def date_start(self):
+        date_start, _ = self.get_start_time_value()
+        return date_start
+
+    def get_end_time_value(self):
+        if self.end_time:
+            date_end, time_end = split_datetime(self.end_time)
+            return date_end, time_end
+        return None, None
+
+    @property
+    def time_end(self):
+        _, time_end = self.get_end_time_value()
+        return time_end
+
+    @property
+    def date_end(self):
+        date_end, _ = self.get_end_time_value()
+        return date_end
 
 
 class Answer(Document):

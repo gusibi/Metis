@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from apis.models import generation_objectid
 from apis.models.test import Test
 from apis.helpers import get_offset_limit, str_to_time
 from apis.verification import current_account
@@ -15,7 +16,7 @@ class SelfTests(Resource):
         if status:
             filter['status'] = status
         offset, limit = get_offset_limit(request.raw_args)
-        tests = Test.objects.raw(filter)
+        tests = Test.objects(**filter).all()
         return tests, 200
 
     async def post(self, request):
@@ -26,5 +27,6 @@ class SelfTests(Resource):
         end_time = request.json.get('end_time')
         if end_time:
             request.json['end_time'] = str_to_time(end_time)
-        test = Test.insert(**request.json)
+        request.json['id'] = generation_objectid()
+        test = Test(**request.json).save()
         return test, 201

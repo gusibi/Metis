@@ -12,12 +12,12 @@ from . import Resource
 class SelfTestsTestIdQuestionsId(Resource):
 
     async def post(self, request, test_id, id):
-        test = Test.get(_id=test_id)
-        if not test or test.get('creator_id') != current_account.id:
+        test = Test.objects(id=test_id).first()
+        if not test or test.creator_id != current_account.id:
             raise NotFound('test_not_found')
-        question = Question.get(_id=id)
-        if not question or question.get('test_id') != test_id:
+        question = Question.objects(id=id, test_id=test_id).first()
+        if not question:
             raise NotFound('question_not_found')
-        result = Question.find_one_and_update(filter={'_id': ObjectId(id)},
-                                              update={'$set': request.json})
-        return result, 200, None
+        question.udpate(**request.json)
+        question.save()
+        return question, 200

@@ -1,11 +1,19 @@
+import random
+
+from bson.objectid import ObjectId
 from mongoengine import connect
+from weixin.helper import safe_char, smart_bytes
 
 from apis.settings import Config
 
-
 # Establish a connection to the database.
-print(Config.MONGO_MASTER_URL)
 connect(Config.MONGO_DATABASE)
+
+
+def generation_objectid():
+    random_str = ''.join(random.sample(safe_char[:-4], 12))
+    # return random_str
+    return ObjectId(smart_bytes(random_str))
 
 
 class ObjectModel(object):

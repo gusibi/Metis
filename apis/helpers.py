@@ -59,7 +59,7 @@ def format_result(fields=None, **formats):
         async def wrapper(*args, **kwargs):
             data, _ = await func(*args, **kwargs)
             for field in fields:
-                value = data.get(field)
+                value = getattr(data, field)
                 format = formats.get(field, 'ISOString')
                 if format == 'ISOString':
                     data[field] = arrow.Arrow.fromdate(value).isoformat()

@@ -7,7 +7,7 @@ from apis.exception import BadRequest
 from apis.verification import get_wxapp_userinfo
 
 from . import Resource
-from .. import schemas
+
 
 
 class AccountsWxapp(Resource):
@@ -26,5 +26,6 @@ class AccountsWxapp(Resource):
             'avatar': user_info['avatarUrl'],
             'authentications': {'wxapp': openid},
         }
-        account = Account.insert(**params)
+        account.update(**params)
+        account.save()
         return account, 201

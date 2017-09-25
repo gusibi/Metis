@@ -6,23 +6,27 @@ from apis.models.test import Test, Question
 from apis.verification import current_account
 from apis.exception import NotFound
 
+from apis.models import generation_objectid
+
 from . import Resource
-from .. import schemas
 
 
 class SelfTestsIdQuestions(Resource):
 
-    async def get(self, request, id):
+    def _get_test(self, id):
         test = Test.objects(id=id).first()
         if not test or test.creator_id != current_account.id:
             raise NotFound('account_not_found')
+        return test
+
+    async def get(self, request, id):
+        test = self._get_test(id)
         questions = Question.objects(test_id=test.id).all()
         return questions, 200
 
     async def post(self, request, id):
-        test = Test.get(_id=id)
-        if not test or test.get('creator_id') != current_account.id:
-            raise NotFound('account_not_found')
-        request.json['test_id'] = id
-        question = Question.insert(**request.json)
-        return question, 201, None
+        test = self._get_test(id)
+        request.json['test_id'] = test.id
+        request.json['id'] = generation_objectid()
+        question = Question(**request.json).save()
+        return question, 201

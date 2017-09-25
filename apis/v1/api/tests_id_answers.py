@@ -29,7 +29,6 @@ class TestsIdAnswers(Resource):
                    answers={question_id: options},
                    updated_time=datetime.utcnow()).save()
         else:
-            print(answer.id)
             answers = answer.answers
             answers[question_id] = options
             answer.update(answers=answers, updated_time=datetime.utcnow())

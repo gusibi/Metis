@@ -77,7 +77,7 @@ class Account(Document):
 
     @classmethod
     def get_by_wxapp(cls, openid):
-        account = cls.get(**{'authentications.wxapp': openid})
+        account = cls.objects(**{'authentications.wxapp': openid}).first()
         return account
 
 
