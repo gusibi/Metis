@@ -10,9 +10,5 @@ from . import Resource
 class TestsHandpick(Resource):
 
     async def get(self, request):
-        filter = {'status': 'published'}
-        tests = Test.objects(**filter).order_by('-created_time')
-        print(tests)
-        for test in tests:
-            print(test.id, test.title, test.creator)
+        tests = Test.objects(status='published').order_by('-participate_number').skip(0).limit(10)
         return tests, 200

@@ -12,28 +12,29 @@
 base_path = '/v1'
 
 
-DefinitionsError = {'properties': {'error_code': {'type': 'integer', 'format': 'int32'}, 'message': {'type': 'string'}, 'text': {'type': 'string'}}}
-DefinitionsOption = {'required': ['option'], 'properties': {'option': {'type': 'string'}}}
-DefinitionsAuthentications = {'description': '用户详细授权数据', 'properties': {'wxapp': {'type': 'string'}, 'mobile': {'type': 'string'}}}
-DefinitionsDistribution = {'properties': {'value': {'type': 'string'}, 'count': {'type': 'integer', 'format': 'int32'}}}
-DefinitionsAccount = {'description': 'account 基本信息', 'required': ['id'], 'properties': {'id': {'type': 'string'}, 'nickname': {'type': 'string'}, 'avatar': {'type': 'string'}}}
-DefinitionsAnswerquestion = {'properties': {'question_id': {'type': 'string'}, 'options': {'type': 'array', 'items': {'type': 'integer', 'format': 'int32'}}}}
-DefinitionsOptionwithanswer = {'required': ['option', 'is_checked'], 'properties': {'index': {'type': 'integer', 'format': 'int32'}, 'option': {'type': 'string'}, 'is_checked': {'type': 'boolean'}}}
 DefinitionsSuccess = {'properties': {'ok': {'type': 'boolean'}}}
-DefinitionsNone = {'type': 'object'}
 DefinitionsDatetime = {'type': 'string', 'format': 'datetime'}
+DefinitionsError = {'properties': {'error_code': {'type': 'integer', 'format': 'int32'}, 'message': {'type': 'string'}, 'text': {'type': 'string'}}}
 DefinitionsQcosconfig = {'properties': {'sign': {'type': 'string'}}}
-DefinitionsUpdatetest = {'properties': {'image': {'type': 'string'}, 'title': {'type': 'string', 'minLength': 8, 'maxLength': 128}, 'description': {'type': 'string', 'minLength': 16, 'maxLength': 256}, 'remark': {'type': 'string'}, 'start_time': DefinitionsDatetime, 'end_time': DefinitionsDatetime, 'status': {'type': 'string', 'enum': ['published', 'withdraw']}}}
-DefinitionsTestdetail = {'required': ['id', 'title', 'description'], 'properties': {'id': {'type': 'string'}, 'image': {'type': 'string'}, 'title': {'type': 'string'}, 'description': {'type': 'string'}, 'date_start': {'type': 'string'}, 'date_end': {'type': 'string'}, 'time_start': {'type': 'string'}, 'time_end': {'type': 'string'}, 'status': {'type': 'string'}, 'start_time': DefinitionsDatetime, 'end_time': DefinitionsDatetime, 'remark': {'type': 'string'}, 'creator': DefinitionsAccount, 'created_time': DefinitionsDatetime}}
-DefinitionsUpdatequestion = {'properties': {'title': {'type': 'string'}, 'type': {'type': 'string', 'enum': ['single_choice', 'multiple_choice']}, 'options': {'type': 'array', 'items': DefinitionsOptionwithanswer}}}
-DefinitionsCreatetest = {'required': ['title', 'description'], 'properties': {'image': {'type': 'string'}, 'title': {'type': 'string', 'minLength': 8, 'maxLength': 128}, 'description': {'type': 'string', 'minLength': 16, 'maxLength': 256}, 'start_time': DefinitionsDatetime, 'end_time': DefinitionsDatetime, 'remark': {'type': 'string'}}}
-DefinitionsQuestiondetail = {'required': ['title', 'options'], 'properties': {'id': {'type': 'string'}, 'title': {'type': 'string'}, 'type': {'type': 'string', 'enum': ['single_choice', 'multiple_choice']}, 'index': {'type': 'integer', 'format': 'int32'}, 'options': {'type': 'array', 'items': DefinitionsOptionwithanswer}}}
+DefinitionsAccount = {'description': 'account 基本信息', 'required': ['id'], 'properties': {'id': {'type': 'string'}, 'nickname': {'type': 'string'}, 'avatar': {'type': 'string'}}}
+DefinitionsOptionwithanswer = {'required': ['option', 'is_checked'], 'properties': {'index': {'type': 'integer', 'format': 'int32'}, 'option': {'type': 'string'}, 'is_checked': {'type': 'boolean'}}}
+DefinitionsDistribution = {'properties': {'value': {'type': 'string'}, 'count': {'type': 'integer', 'format': 'int32'}}}
+DefinitionsOption = {'required': ['option'], 'properties': {'option': {'type': 'string'}}}
+DefinitionsAnswersuccess = {'properties': {'ok': {'type': 'boolean'}, 'last': {'type': 'boolean'}}}
+DefinitionsNone = {'type': 'object'}
+DefinitionsAnswerquestion = {'required': ['question_id', 'options'], 'properties': {'question_id': {'type': 'string'}, 'options': {'type': 'array', 'items': {'type': 'integer', 'format': 'int32'}}}}
+DefinitionsAuthentications = {'description': '用户详细授权数据', 'properties': {'wxapp': {'type': 'string'}, 'mobile': {'type': 'string'}}}
+DefinitionsTesting = {'required': ['id', 'score', 'title', 'description'], 'properties': {'id': {'type': 'string'}, 'score': {'type': 'integer', 'format': 'int32'}, 'image': {'type': 'string'}, 'title': {'type': 'string'}, 'description': {'type': 'string'}, 'question_count': {'type': 'intege'}, 'creator': DefinitionsAccount, 'created_time': DefinitionsDatetime}}
 DefinitionsTestingstatistics = {'properties': {'total_count': {'type': 'integer'}, 'max_score': {'type': 'integer'}, 'min_score': {'type': 'integer'}, 'avg_score': {'type': 'integer'}, 'distributions': {'type': 'array', 'items': DefinitionsDistribution}}}
-DefinitionsTesting = {'required': ['id', 'score', 'title', 'description'], 'properties': {'id': {'type': 'string'}, 'score': {'type': 'integer', 'format': 'int32'}, 'image': {'type': 'string'}, 'title': {'type': 'string'}, 'description': {'type': 'string'}, 'creator': DefinitionsAccount, 'created_time': DefinitionsDatetime}}
-DefinitionsTest = {'required': ['id', 'title', 'description'], 'properties': {'id': {'type': 'string'}, 'image': {'type': 'string'}, 'title': {'type': 'string'}, 'description': {'type': 'string'}, 'start_time': DefinitionsDatetime, 'end_time': DefinitionsDatetime, 'creator': DefinitionsAccount, 'created_time': DefinitionsDatetime}}
-DefinitionsAccountdetail = {'description': 'account 信息', 'required': ['id'], 'properties': {'id': {'type': 'string'}, 'username': {'type': 'string'}, 'nickname': {'type': 'string'}, 'avatar': {'type': 'string'}, 'authentications': DefinitionsAuthentications, 'created_time': DefinitionsDatetime}}
+DefinitionsUpdatequestion = {'properties': {'title': {'type': 'string'}, 'type': {'type': 'string', 'enum': ['single_choice', 'multiple_choice']}, 'options': {'type': 'array', 'items': DefinitionsOptionwithanswer}}}
+DefinitionsUpdatetest = {'properties': {'image': {'type': 'string'}, 'title': {'type': 'string', 'minLength': 8, 'maxLength': 128}, 'description': {'type': 'string', 'minLength': 16, 'maxLength': 256}, 'remark': {'type': 'string'}, 'start_time': DefinitionsDatetime, 'end_time': DefinitionsDatetime, 'status': {'type': 'string', 'enum': ['published', 'withdraw']}}}
+DefinitionsQuestiondetail = {'required': ['title', 'options'], 'properties': {'id': {'type': 'string'}, 'title': {'type': 'string'}, 'type': {'type': 'string', 'enum': ['single_choice', 'multiple_choice']}, 'number': {'type': 'integer', 'format': 'int32'}, 'options': {'type': 'array', 'items': DefinitionsOptionwithanswer}}}
+DefinitionsTest = {'required': ['id', 'title', 'description'], 'properties': {'id': {'type': 'string'}, 'image': {'type': 'string'}, 'title': {'type': 'string'}, 'description': {'type': 'string'}, 'start_time': DefinitionsDatetime, 'end_time': DefinitionsDatetime, 'question_count': {'type': 'integer'}, 'creator': DefinitionsAccount, 'created_time': DefinitionsDatetime}}
+DefinitionsCreatetest = {'required': ['title', 'description'], 'properties': {'image': {'type': 'string'}, 'title': {'type': 'string', 'minLength': 8, 'maxLength': 128}, 'description': {'type': 'string', 'minLength': 16, 'maxLength': 256}, 'start_time': DefinitionsDatetime, 'end_time': DefinitionsDatetime, 'remark': {'type': 'string'}}}
+DefinitionsQuestion = {'required': ['title', 'options'], 'properties': {'title': {'type': 'string'}, 'number': {'type': 'integer', 'format': 'int32'}, 'options': {'type': 'array', 'items': DefinitionsOption}}}
+DefinitionsTestdetail = {'required': ['id', 'title', 'description'], 'properties': {'id': {'type': 'string'}, 'image': {'type': 'string'}, 'title': {'type': 'string'}, 'description': {'type': 'string'}, 'date_start': {'type': 'string'}, 'date_end': {'type': 'string'}, 'time_start': {'type': 'string'}, 'time_end': {'type': 'string'}, 'status': {'type': 'string'}, 'start_time': DefinitionsDatetime, 'end_time': DefinitionsDatetime, 'remark': {'type': 'string'}, 'question_count': {'type': 'integer'}, 'creator': DefinitionsAccount, 'created_time': DefinitionsDatetime}}
 DefinitionsCreatequestion = {'properties': {'title': {'type': 'string'}, 'type': {'type': 'string', 'enum': ['single_choice', 'multiple_choice']}, 'options': {'type': 'array', 'items': DefinitionsOptionwithanswer}}}
-DefinitionsQuestion = {'required': ['title', 'options'], 'properties': {'title': {'type': 'string'}, 'options': {'type': 'array', 'items': DefinitionsOption}}}
+DefinitionsAccountdetail = {'description': 'account 信息', 'required': ['id'], 'properties': {'id': {'type': 'string'}, 'username': {'type': 'string'}, 'nickname': {'type': 'string'}, 'avatar': {'type': 'string'}, 'authentications': DefinitionsAuthentications, 'created_time': DefinitionsDatetime}}
 
 validators = {
     ('self_tests', 'GET'): {'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}, 'args': {'required': [], 'properties': {'status': {'description': 'test status in query', 'type': 'string', 'required': False, 'enum': ['draft', 'published', 'withdraw']}, 'offset': {'description': 'offset in query', 'type': 'integer', 'format': 'int32', 'default': 0, 'required': False}, 'limit': {'description': 'limit in query', 'type': 'integer', 'format': 'int32', 'default': 20, 'required': False}}}},
@@ -66,7 +67,7 @@ filters = {
     ('tests_handpick', 'GET'): {200: {'headers': None, 'schema': {'type': 'array', 'items': DefinitionsTest}}},
     ('tests_id', 'GET'): {200: {'headers': None, 'schema': DefinitionsTest}},
     ('tests_id_questions', 'GET'): {200: {'headers': None, 'schema': {'type': 'array', 'items': DefinitionsQuestion}}},
-    ('tests_id_answers', 'POST'): {201: {'headers': None, 'schema': DefinitionsSuccess}},
+    ('tests_id_answers', 'POST'): {201: {'headers': None, 'schema': DefinitionsAnswersuccess}},
     ('tests_id_statistics', 'GET'): {200: {'headers': None, 'schema': DefinitionsTestingstatistics}},
     ('qc_cos_config', 'GET'): {200: {'headers': None, 'schema': DefinitionsQcosconfig}},
 }

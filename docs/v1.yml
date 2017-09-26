@@ -66,6 +66,8 @@ definitions:
                 type: string
             description:
                 type: string
+            question_count:
+                type: intege
             creator:
                 $ref: '#/definitions/Account'
             created_time:
@@ -132,6 +134,8 @@ definitions:
                 $ref: '#/definitions/datetime'
             end_time:
                 $ref: '#/definitions/datetime'
+            question_count:
+                type: integer
             creator:
                 $ref: '#/definitions/Account'
             created_time:
@@ -166,6 +170,8 @@ definitions:
                 $ref: '#/definitions/datetime'
             remark:
                 type: string
+            question_count:
+                type: integer
             creator:
                 $ref: '#/definitions/Account'
             created_time:
@@ -195,6 +201,9 @@ definitions:
         properties:
             title:
                 type: string
+            number:
+                type: integer
+                format: int32
             options:
                 type: array
                 items:
@@ -213,7 +222,7 @@ definitions:
                 enum:
                     - single_choice
                     - multiple_choice
-            index:
+            number:
                 type: integer
                 format: int32
             options:
@@ -258,6 +267,12 @@ definitions:
                 items:
                     type: integer
                     format: int32
+    AnswerSuccess:
+        properties:
+            ok:
+                type: boolean
+            last:
+                type: boolean
     Distribution:
         properties:
             value:
@@ -642,7 +657,7 @@ paths:
             responses:
                 201:
                     schema:
-                        $ref: '#/definitions/Success'
+                        $ref: '#/definitions/AnswerSuccess'
                 default:
                     description: Unexpected error
                     schema:

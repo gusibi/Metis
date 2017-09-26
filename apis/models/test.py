@@ -26,7 +26,6 @@ class Question(Document):
                 {'value': '这是第一个选项', 'index': 0, 'is_checked': True},
                 {'value': '这是第二个选项', 'index': 1, 'is_checked': False},
                 ]
-    :param index: 1,
     '''
 
     def __getattribute__(self, name):
@@ -35,7 +34,14 @@ class Question(Document):
             return smart_str(id)
         return super(Question, self).__getattribute__(name)
 
-    meta = {"collection_name": 'question'}
+    meta = {
+        "collection_name": 'question',
+        'indexes': [
+            'title',
+            '$title',  # text index
+            ('test_id', 'number'),
+        ]
+    }
 
     id = ObjectIdField(primary_key=True, required=True)
     test_id = StringField(required=True)
@@ -45,7 +51,6 @@ class Question(Document):
     options = ListField(required=True, default=[])
     created_time = DateTimeField(default=datetime.utcnow())
     updated_time = DateTimeField()
-
 
 
 class Test(Document):
@@ -77,6 +82,7 @@ class Test(Document):
     remark = StringField()
     status = StringField(required=True, default='draft')
     total_score = IntField()
+    question_count = IntField(required=True, default=0)
     participate_number = IntField(required=True, default=0)
     start_time = DateTimeField()
     end_time = DateTimeField()
@@ -144,9 +150,11 @@ class Answer(Document):
 
     meta = {"collection_name": 'answer'}
 
-    # id = ObjectIdField(primary_key=True, default=)
+    id = ObjectIdField(primary_key=True)
     test_id = StringField(required=True)
     account_id = StringField(required=True)
+    score = IntField()
     answers = DictField(default={})
+    status = StringField(required=True, default='pendding')
     created_time = DateTimeField(default=datetime.utcnow())
     updated_time = DateTimeField()

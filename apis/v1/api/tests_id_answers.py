@@ -12,6 +12,21 @@ from . import Resource
 
 class TestsIdAnswers(Resource):
 
+    def calculate_score(self, test, answers):
+        questions = Question.objects(test_id=test.id).order_by('number').all()
+        correct_answers = {}
+        for question in questions:
+            print(question.options)
+            for option in question.options:
+                if option.get('is_checked'):
+                    correct_answers.setdefault(question.id, []).append(option['index'])
+        corrent_count = 0
+        for qid, answer in answers.items():
+            if correct_answers.get(qid) == answer:
+                corrent_count += 1
+        score = test.total_score / test.question_count * corrent_count
+        return score
+
     async def post(self, request, id):
         test = Test.objects(id=id).first()
         if not test or test.status != 'published':
@@ -33,5 +48,11 @@ class TestsIdAnswers(Resource):
             answers[question_id] = options
             answer.update(answers=answers, updated_time=datetime.utcnow())
             answer.save()
-
-        return {'ok': True}, 201
+        if question.number == test.question_count - 1:
+            last = True
+            score = self.calculate_score(test, answer.answers)
+            answer.update(score=score, status='finished')
+            # 统计分数
+        else:
+            last = False
+        return {'ok': True, 'last': last}, 201
