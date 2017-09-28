@@ -44,7 +44,6 @@ class HasedPassword(object):
 
 class Authentications(EmbeddedDocument):
 
-    account_id = ObjectIdField(primary_key=True)
     wxapp = StringField()
     mobile = StringField()
 
@@ -69,15 +68,17 @@ class Account(Document):
     }
 
     id = ObjectIdField(primary_key=True, required=True)
-    username = StringField(required=True)
-    password = StringField(required=True)
+    nickname = StringField(required=True)
+    avatar = StringField(required=True)
+    username = StringField()
+    password = StringField()
     authentications = EmbeddedDocumentField(Authentications)
     created_time = DateTimeField(default=datetime.utcnow())
     updated_time = DateTimeField()
 
     @classmethod
     def get_by_wxapp(cls, openid):
-        account = cls.objects(**{'authentications.wxapp': openid}).first()
+        account = cls.objects(authentications__wxapp=openid).first()
         return account
 
 
@@ -85,7 +86,8 @@ class OAuth2Client(Document):
 
     meta = {'collection': 'oauth2_client'}
 
-    client_id = StringField(primary_key=True, required=True)
+    id = ObjectIdField(primary_key=True, required=True)
+    client_id = StringField(required=True)
     account_id = ObjectIdField(required=True)
     secret = StringField(required=True)
     scopes = ListField(required=True)

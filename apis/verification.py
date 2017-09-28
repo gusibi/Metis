@@ -32,10 +32,10 @@ def get_authorization(request):
 
 
 def verify_client(client_id, secret):
-    client = OAuth2Client.objects(client_id=smart_str(client_id),
-                                  secret=smart_str(secret))
+    client = OAuth2Client.objects(client_id=client_id,
+                                  secret=secret).first()
     if client:
-        return True, client.get('scopes', [])
+        return True, client.scopes or []
     return False, []
 
 
@@ -100,12 +100,13 @@ def create_token(request):
         "iat": int(time.time()),
         "exp": int(time.time()) + 86400 * 7,
         "aud": Config.AUDIENCE,
-        "sub": str(account['_id']),
+        "sub": str(account.id),
         "nickname": account['nickname'],
         "scopes": ['open']
     }
     token = jwt.encode(payload, 'secret', algorithm='HS256')
-    return True, {'access_token': token, 'account_id': str(account['_id'])}
+    return True, {'access_token': token,
+                  'account_id': str(account.id)}
 
 
 def verify_basic_token(token):

@@ -2,12 +2,12 @@
 
 from sanic.response import text, json
 
+from apis.models import generation_objectid
 from apis.models.oauth import Account
 from apis.exception import BadRequest
 from apis.verification import get_wxapp_userinfo
 
 from . import Resource
-
 
 
 class AccountsWxapp(Resource):
@@ -22,10 +22,11 @@ class AccountsWxapp(Resource):
         if account:
             raise BadRequest('wxapp_already_registered')
         params = {
+            'id': generation_objectid(),
             'nickname': user_info['nickName'],
             'avatar': user_info['avatarUrl'],
             'authentications': {'wxapp': openid},
         }
-        account.update(**params)
+        account = Account(**params)
         account.save()
         return account, 201
