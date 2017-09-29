@@ -287,6 +287,14 @@ definitions:
             count:
                 type: integer
                 format: int32
+    TestScore:
+        properties:
+            test_id:
+                type: string
+            score:
+                type: integer
+            rank:
+                type: integer
     TestingStatistics:
         properties:
             total_count:
@@ -649,6 +657,25 @@ paths:
                         type: array
                         items:
                             $ref: '#/definitions/Question'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+    /tests/{id}/score:
+        get:
+            summary: 用户测试分数
+            description: 用户测试分数
+            tags: [TESTING]
+            operationId: get_test_score
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/id_in_path'
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/TestScore'
                 default:
                     description: Unexpected error
                     schema:
