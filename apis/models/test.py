@@ -81,7 +81,7 @@ class Test(Document):
     image = StringField()
     remark = StringField()
     status = StringField(required=True, default='draft')
-    total_score = IntField()
+    total_score = IntField(default=100)
     question_count = IntField(required=True, default=0)
     participate_number = IntField(required=True, default=0)
     start_time = DateTimeField()

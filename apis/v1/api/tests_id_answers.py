@@ -2,6 +2,7 @@
 
 from datetime import datetime
 
+from apis.models import generation_objectid
 from apis.models.test import Test, Question, Answer
 from apis.exception import NotFound
 from apis.verification import current_account
@@ -16,7 +17,6 @@ class TestsIdAnswers(Resource):
         questions = Question.objects(test_id=test.id).order_by('number').all()
         correct_answers = {}
         for question in questions:
-            print(question.options)
             for option in question.options:
                 if option.get('is_checked'):
                     correct_answers.setdefault(question.id, []).append(option['index'])
@@ -39,10 +39,12 @@ class TestsIdAnswers(Resource):
         answer = Answer.objects(account_id=current_account.id,
                                 test_id=test.id).first()
         if not answer:
-            Answer(account_id=current_account.id,
-                   test_id=test.id,
-                   answers={question_id: options},
-                   updated_time=datetime.utcnow()).save()
+            Answer(
+                id=generation_objectid(),
+                account_id=current_account.id,
+                test_id=test.id,
+                answers={question_id: options},
+                updated_time=datetime.utcnow()).save()
         else:
             answers = answer.answers
             answers[question_id] = options

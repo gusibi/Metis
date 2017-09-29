@@ -67,7 +67,7 @@ definitions:
             description:
                 type: string
             question_count:
-                type: intege
+                type: integer
             creator:
                 $ref: '#/definitions/Account'
             created_time:
@@ -180,6 +180,9 @@ definitions:
         required:
             - option
         properties:
+            index:
+                type: integer
+                format: int32
             option:
                 type: string
     OptionWithAnswer:
@@ -196,9 +199,12 @@ definitions:
                 type: boolean
     Question:
         required:
+            - id
             - title
             - options
         properties:
+            id:
+                type: string
             title:
                 type: string
             number:
@@ -210,6 +216,7 @@ definitions:
                     $ref: '#/definitions/Option'
     QuestionDetail:
         required:
+            - id
             - title
             - options
         properties:
@@ -353,6 +360,13 @@ parameters:
         name: cos_path
         type: string
         required: false
+    step_in_query:
+        description: step in query
+        in: query
+        name: step
+        type: integer
+        format: int32
+        default: 0
     offset:
         description: offset in query
         in: query
@@ -498,6 +512,7 @@ paths:
             parameters:
                 - $ref: '#/parameters/AccessToken'
                 - $ref: '#/parameters/id_in_path'
+                - $ref: '#/parameters/step_in_query'
             responses:
                 200:
                     schema:
