@@ -81,11 +81,11 @@ definitions:
                 type: string
             title:
                 type: string
-                minLength: 8
+                minLength: 3
                 maxLength: 128
             description:
                 type: string
-                minLength: 16
+                minLength: 6
                 maxLength: 256
             start_time:
                 $ref: '#/definitions/datetime'
@@ -99,11 +99,11 @@ definitions:
                 type: string
             title:
                 type: string
-                minLength: 8
+                minLength: 3
                 maxLength: 128
             description:
                 type: string
-                minLength: 16
+                minLength: 6
                 maxLength: 256
             remark:
                 type: string

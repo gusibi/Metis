@@ -12,65 +12,65 @@
 base_path = '/v1'
 
 
-DefinitionsAccount = {'properties': {'id': {'type': 'string'}, 'avatar': {'type': 'string'}, 'nickname': {'type': 'string'}}, 'required': ['id'], 'description': 'account 基本信息'}
-DefinitionsQcosconfig = {'properties': {'sign': {'type': 'string'}}}
-DefinitionsOption = {'properties': {'index': {'format': 'int32', 'type': 'integer'}, 'option': {'type': 'string'}}, 'required': ['option']}
 DefinitionsAnswersuccess = {'properties': {'ok': {'type': 'boolean'}, 'last': {'type': 'boolean'}}}
-DefinitionsAuthentications = {'properties': {'mobile': {'type': 'string'}, 'wxapp': {'type': 'string'}}, 'description': '用户详细授权数据'}
+DefinitionsOption = {'required': ['option'], 'properties': {'index': {'type': 'integer', 'format': 'int32'}, 'option': {'type': 'string'}}}
+DefinitionsTestscore = {'properties': {'test_id': {'type': 'string'}, 'score': {'type': 'integer'}, 'rank': {'type': 'integer'}}}
+DefinitionsDatetime = {'type': 'string', 'format': 'datetime'}
+DefinitionsQcosconfig = {'properties': {'sign': {'type': 'string'}}}
 DefinitionsSuccess = {'properties': {'ok': {'type': 'boolean'}}}
-DefinitionsError = {'properties': {'message': {'type': 'string'}, 'error_code': {'format': 'int32', 'type': 'integer'}, 'text': {'type': 'string'}}}
+DefinitionsAuthentications = {'description': '用户详细授权数据', 'properties': {'wxapp': {'type': 'string'}, 'mobile': {'type': 'string'}}}
+DefinitionsError = {'properties': {'error_code': {'type': 'integer', 'format': 'int32'}, 'message': {'type': 'string'}, 'text': {'type': 'string'}}}
 DefinitionsNone = {'type': 'object'}
-DefinitionsAnswerquestion = {'properties': {'options': {'items': {'format': 'int32', 'type': 'integer'}, 'type': 'array'}, 'question_id': {'type': 'string'}}, 'required': ['question_id', 'options']}
-DefinitionsDistribution = {'properties': {'count': {'format': 'int32', 'type': 'integer'}, 'value': {'type': 'string'}}}
-DefinitionsOptionwithanswer = {'properties': {'is_checked': {'type': 'boolean'}, 'index': {'format': 'int32', 'type': 'integer'}, 'option': {'type': 'string'}}, 'required': ['option', 'is_checked']}
-DefinitionsDatetime = {'format': 'datetime', 'type': 'string'}
-DefinitionsTestscore = {'properties': {'score': {'type': 'integer'}, 'test_id': {'type': 'string'}, 'rank': {'type': 'integer'}}}
-DefinitionsTestingstatistics = {'properties': {'distributions': {'items': DefinitionsDistribution, 'type': 'array'}, 'min_score': {'type': 'integer'}, 'avg_score': {'type': 'integer'}, 'max_score': {'type': 'integer'}, 'total_count': {'type': 'integer'}}}
-DefinitionsQuestion = {'properties': {'number': {'format': 'int32', 'type': 'integer'}, 'id': {'type': 'string'}, 'title': {'type': 'string'}, 'options': {'items': DefinitionsOption, 'type': 'array'}}, 'required': ['id', 'title', 'options']}
-DefinitionsUpdatequestion = {'properties': {'options': {'items': DefinitionsOptionwithanswer, 'type': 'array'}, 'type': {'enum': ['single_choice', 'multiple_choice'], 'type': 'string'}, 'title': {'type': 'string'}}}
-DefinitionsUpdatetest = {'properties': {'start_time': DefinitionsDatetime, 'status': {'enum': ['published', 'withdraw'], 'type': 'string'}, 'end_time': DefinitionsDatetime, 'title': {'type': 'string', 'minLength': 8, 'maxLength': 128}, 'image': {'type': 'string'}, 'description': {'type': 'string', 'minLength': 16, 'maxLength': 256}, 'remark': {'type': 'string'}}}
-DefinitionsCreatequestion = {'properties': {'options': {'items': DefinitionsOptionwithanswer, 'type': 'array'}, 'type': {'enum': ['single_choice', 'multiple_choice'], 'type': 'string'}, 'title': {'type': 'string'}}}
-DefinitionsTestdetail = {'properties': {'date_end': {'type': 'string'}, 'time_start': {'type': 'string'}, 'end_time': DefinitionsDatetime, 'image': {'type': 'string'}, 'date_start': {'type': 'string'}, 'start_time': DefinitionsDatetime, 'status': {'type': 'string'}, 'time_end': {'type': 'string'}, 'creator': DefinitionsAccount, 'title': {'type': 'string'}, 'question_count': {'type': 'integer'}, 'id': {'type': 'string'}, 'description': {'type': 'string'}, 'remark': {'type': 'string'}, 'created_time': DefinitionsDatetime}, 'required': ['id', 'title', 'description']}
-DefinitionsTesting = {'properties': {'creator': DefinitionsAccount, 'image': {'type': 'string'}, 'created_time': DefinitionsDatetime, 'title': {'type': 'string'}, 'score': {'format': 'int32', 'type': 'integer'}, 'id': {'type': 'string'}, 'description': {'type': 'string'}, 'question_count': {'type': 'integer'}}, 'required': ['id', 'score', 'title', 'description']}
-DefinitionsCreatetest = {'properties': {'start_time': DefinitionsDatetime, 'end_time': DefinitionsDatetime, 'title': {'type': 'string', 'minLength': 8, 'maxLength': 128}, 'image': {'type': 'string'}, 'description': {'type': 'string', 'minLength': 16, 'maxLength': 256}, 'remark': {'type': 'string'}}, 'required': ['title', 'description']}
-DefinitionsQuestiondetail = {'properties': {'number': {'format': 'int32', 'type': 'integer'}, 'id': {'type': 'string'}, 'type': {'enum': ['single_choice', 'multiple_choice'], 'type': 'string'}, 'title': {'type': 'string'}, 'options': {'items': DefinitionsOptionwithanswer, 'type': 'array'}}, 'required': ['id', 'title', 'options']}
-DefinitionsAccountdetail = {'properties': {'username': {'type': 'string'}, 'avatar': {'type': 'string'}, 'nickname': {'type': 'string'}, 'id': {'type': 'string'}, 'authentications': DefinitionsAuthentications, 'created_time': DefinitionsDatetime}, 'required': ['id'], 'description': 'account 信息'}
-DefinitionsTest = {'properties': {'creator': DefinitionsAccount, 'end_time': DefinitionsDatetime, 'image': {'type': 'string'}, 'start_time': DefinitionsDatetime, 'created_time': DefinitionsDatetime, 'title': {'type': 'string'}, 'id': {'type': 'string'}, 'description': {'type': 'string'}, 'question_count': {'type': 'integer'}}, 'required': ['id', 'title', 'description']}
+DefinitionsAnswerquestion = {'required': ['question_id', 'options'], 'properties': {'question_id': {'type': 'string'}, 'options': {'type': 'array', 'items': {'type': 'integer', 'format': 'int32'}}}}
+DefinitionsDistribution = {'properties': {'value': {'type': 'string'}, 'count': {'type': 'integer', 'format': 'int32'}}}
+DefinitionsOptionwithanswer = {'required': ['option', 'is_checked'], 'properties': {'index': {'type': 'integer', 'format': 'int32'}, 'option': {'type': 'string'}, 'is_checked': {'type': 'boolean'}}}
+DefinitionsAccount = {'description': 'account 基本信息', 'required': ['id'], 'properties': {'id': {'type': 'string'}, 'nickname': {'type': 'string'}, 'avatar': {'type': 'string'}}}
+DefinitionsUpdatequestion = {'properties': {'title': {'type': 'string'}, 'type': {'type': 'string', 'enum': ['single_choice', 'multiple_choice']}, 'options': {'type': 'array', 'items': DefinitionsOptionwithanswer}}}
+DefinitionsQuestion = {'required': ['id', 'title', 'options'], 'properties': {'id': {'type': 'string'}, 'title': {'type': 'string'}, 'number': {'type': 'integer', 'format': 'int32'}, 'options': {'type': 'array', 'items': DefinitionsOption}}}
+DefinitionsAccountdetail = {'description': 'account 信息', 'required': ['id'], 'properties': {'id': {'type': 'string'}, 'username': {'type': 'string'}, 'nickname': {'type': 'string'}, 'avatar': {'type': 'string'}, 'authentications': DefinitionsAuthentications, 'created_time': DefinitionsDatetime}}
+DefinitionsCreatequestion = {'properties': {'title': {'type': 'string'}, 'type': {'type': 'string', 'enum': ['single_choice', 'multiple_choice']}, 'options': {'type': 'array', 'items': DefinitionsOptionwithanswer}}}
+DefinitionsCreatetest = {'required': ['title', 'description'], 'properties': {'image': {'type': 'string'}, 'title': {'type': 'string', 'minLength': 3, 'maxLength': 128}, 'description': {'type': 'string', 'minLength': 6, 'maxLength': 256}, 'start_time': DefinitionsDatetime, 'end_time': DefinitionsDatetime, 'remark': {'type': 'string'}}}
+DefinitionsTest = {'required': ['id', 'title', 'description'], 'properties': {'id': {'type': 'string'}, 'image': {'type': 'string'}, 'title': {'type': 'string'}, 'description': {'type': 'string'}, 'start_time': DefinitionsDatetime, 'end_time': DefinitionsDatetime, 'question_count': {'type': 'integer'}, 'creator': DefinitionsAccount, 'created_time': DefinitionsDatetime}}
+DefinitionsQuestiondetail = {'required': ['id', 'title', 'options'], 'properties': {'id': {'type': 'string'}, 'title': {'type': 'string'}, 'type': {'type': 'string', 'enum': ['single_choice', 'multiple_choice']}, 'number': {'type': 'integer', 'format': 'int32'}, 'options': {'type': 'array', 'items': DefinitionsOptionwithanswer}}}
+DefinitionsTestingstatistics = {'properties': {'total_count': {'type': 'integer'}, 'max_score': {'type': 'integer'}, 'min_score': {'type': 'integer'}, 'avg_score': {'type': 'integer'}, 'distributions': {'type': 'array', 'items': DefinitionsDistribution}}}
+DefinitionsTesting = {'required': ['id', 'score', 'title', 'description'], 'properties': {'id': {'type': 'string'}, 'score': {'type': 'integer', 'format': 'int32'}, 'image': {'type': 'string'}, 'title': {'type': 'string'}, 'description': {'type': 'string'}, 'question_count': {'type': 'integer'}, 'creator': DefinitionsAccount, 'created_time': DefinitionsDatetime}}
+DefinitionsTestdetail = {'required': ['id', 'title', 'description'], 'properties': {'id': {'type': 'string'}, 'image': {'type': 'string'}, 'title': {'type': 'string'}, 'description': {'type': 'string'}, 'date_start': {'type': 'string'}, 'date_end': {'type': 'string'}, 'time_start': {'type': 'string'}, 'time_end': {'type': 'string'}, 'status': {'type': 'string'}, 'start_time': DefinitionsDatetime, 'end_time': DefinitionsDatetime, 'remark': {'type': 'string'}, 'question_count': {'type': 'integer'}, 'creator': DefinitionsAccount, 'created_time': DefinitionsDatetime}}
+DefinitionsUpdatetest = {'properties': {'image': {'type': 'string'}, 'title': {'type': 'string', 'minLength': 3, 'maxLength': 128}, 'description': {'type': 'string', 'minLength': 6, 'maxLength': 256}, 'remark': {'type': 'string'}, 'start_time': DefinitionsDatetime, 'end_time': DefinitionsDatetime, 'status': {'type': 'string', 'enum': ['published', 'withdraw']}}}
 
 validators = {
-    ('self_tests', 'GET'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}, 'args': {'properties': {'status': {'required': False, 'enum': ['draft', 'published', 'withdraw'], 'description': 'test status in query', 'type': 'string'}, 'limit': {'required': False, 'format': 'int32', 'default': 20, 'description': 'limit in query', 'type': 'integer'}, 'offset': {'required': False, 'format': 'int32', 'default': 0, 'description': 'offset in query', 'type': 'integer'}}, 'required': []}},
-    ('self_tests', 'POST'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}, 'json': DefinitionsCreatetest},
-    ('tests_id_questions', 'GET'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}},
-    ('tests_id_score', 'GET'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}},
-    ('self_testings', 'GET'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}, 'args': {'properties': {'limit': {'required': False, 'format': 'int32', 'default': 20, 'description': 'limit in query', 'type': 'integer'}, 'offset': {'required': False, 'format': 'int32', 'default': 0, 'description': 'offset in query', 'type': 'integer'}}, 'required': []}},
-    ('tests_id_answers', 'POST'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}, 'json': DefinitionsAnswerquestion},
-    ('self_tests_id_questions', 'GET'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}, 'args': {'properties': {'step': {'format': 'int32', 'default': 0, 'description': 'step in query', 'type': 'integer'}}, 'required': []}},
-    ('self_tests_id_questions', 'POST'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}, 'json': DefinitionsCreatequestion},
-    ('tests_id', 'GET'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}},
-    ('self_tests_test_id_questions_id', 'PUT'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}, 'json': DefinitionsUpdatequestion},
-    ('tests_handpick', 'GET'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}},
-    ('self_tests_id', 'GET'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}},
-    ('self_tests_id', 'DELETE'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}},
-    ('self_tests_id', 'PUT'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}, 'json': DefinitionsUpdatetest},
-    ('tests_id_statistics', 'GET'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}},
-    ('qc_cos_config', 'GET'): {'headers': {'properties': {'Authorization': {'type': 'string'}}, 'required': ['Authorization']}, 'args': {'properties': {'cos_path': {'description': 'cos path', 'type': 'string', 'required': False}}, 'required': []}},
+    ('self_tests', 'GET'): {'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}, 'args': {'required': [], 'properties': {'status': {'description': 'test status in query', 'type': 'string', 'required': False, 'enum': ['draft', 'published', 'withdraw']}, 'offset': {'description': 'offset in query', 'type': 'integer', 'format': 'int32', 'default': 0, 'required': False}, 'limit': {'description': 'limit in query', 'type': 'integer', 'format': 'int32', 'default': 20, 'required': False}}}},
+    ('self_tests', 'POST'): {'json': DefinitionsCreatetest, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
+    ('self_tests_id', 'GET'): {'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
+    ('self_tests_id', 'PUT'): {'json': DefinitionsUpdatetest, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
+    ('self_tests_id', 'DELETE'): {'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
+    ('self_tests_id_questions', 'GET'): {'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}, 'args': {'required': [], 'properties': {'step': {'description': 'step in query', 'type': 'integer', 'format': 'int32', 'default': 0}}}},
+    ('self_tests_id_questions', 'POST'): {'json': DefinitionsCreatequestion, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
+    ('self_tests_test_id_questions_id', 'PUT'): {'json': DefinitionsUpdatequestion, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
+    ('self_testings', 'GET'): {'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}, 'args': {'required': [], 'properties': {'offset': {'description': 'offset in query', 'type': 'integer', 'format': 'int32', 'default': 0, 'required': False}, 'limit': {'description': 'limit in query', 'type': 'integer', 'format': 'int32', 'default': 20, 'required': False}}}},
+    ('tests_handpick', 'GET'): {'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
+    ('tests_id', 'GET'): {'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
+    ('tests_id_questions', 'GET'): {'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
+    ('tests_id_score', 'GET'): {'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
+    ('tests_id_answers', 'POST'): {'json': DefinitionsAnswerquestion, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
+    ('tests_id_statistics', 'GET'): {'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
+    ('qc_cos_config', 'GET'): {'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}, 'args': {'required': [], 'properties': {'cos_path': {'description': 'cos path', 'type': 'string', 'required': False}}}},
 }
 
 filters = {
-    ('self_tests', 'GET'): {200: {'headers': None, 'schema': {'items': DefinitionsTestdetail, 'type': 'array'}}},
+    ('self_tests', 'GET'): {200: {'headers': None, 'schema': {'type': 'array', 'items': DefinitionsTestdetail}}},
     ('self_tests', 'POST'): {201: {'headers': None, 'schema': DefinitionsTestdetail}},
-    ('tests_id_questions', 'GET'): {200: {'headers': None, 'schema': {'items': DefinitionsQuestion, 'type': 'array'}}},
-    ('tests_id_score', 'GET'): {200: {'headers': None, 'schema': DefinitionsTestscore}},
-    ('self_testings', 'GET'): {200: {'headers': None, 'schema': {'items': DefinitionsTesting, 'type': 'array'}}},
-    ('tests_id_answers', 'POST'): {201: {'headers': None, 'schema': DefinitionsAnswersuccess}},
-    ('self_tests_id_questions', 'GET'): {200: {'headers': None, 'schema': {'items': DefinitionsQuestiondetail, 'type': 'array'}}},
-    ('self_tests_id_questions', 'POST'): {201: {'headers': None, 'schema': DefinitionsQuestiondetail}},
-    ('tests_id', 'GET'): {200: {'headers': None, 'schema': DefinitionsTest}},
-    ('self_tests_test_id_questions_id', 'PUT'): {200: {'headers': None, 'schema': DefinitionsQuestion}},
-    ('tests_handpick', 'GET'): {200: {'headers': None, 'schema': {'items': DefinitionsTest, 'type': 'array'}}},
     ('self_tests_id', 'GET'): {200: {'headers': None, 'schema': DefinitionsTestdetail}},
-    ('self_tests_id', 'DELETE'): {204: {'headers': None, 'schema': DefinitionsSuccess}},
     ('self_tests_id', 'PUT'): {200: {'headers': None, 'schema': DefinitionsTest}},
+    ('self_tests_id', 'DELETE'): {204: {'headers': None, 'schema': DefinitionsSuccess}},
+    ('self_tests_id_questions', 'GET'): {200: {'headers': None, 'schema': {'type': 'array', 'items': DefinitionsQuestiondetail}}},
+    ('self_tests_id_questions', 'POST'): {201: {'headers': None, 'schema': DefinitionsQuestiondetail}},
+    ('self_tests_test_id_questions_id', 'PUT'): {200: {'headers': None, 'schema': DefinitionsQuestion}},
+    ('self_testings', 'GET'): {200: {'headers': None, 'schema': {'type': 'array', 'items': DefinitionsTesting}}},
+    ('tests_handpick', 'GET'): {200: {'headers': None, 'schema': {'type': 'array', 'items': DefinitionsTest}}},
+    ('tests_id', 'GET'): {200: {'headers': None, 'schema': DefinitionsTest}},
+    ('tests_id_questions', 'GET'): {200: {'headers': None, 'schema': {'type': 'array', 'items': DefinitionsQuestion}}},
+    ('tests_id_score', 'GET'): {200: {'headers': None, 'schema': DefinitionsTestscore}},
+    ('tests_id_answers', 'POST'): {201: {'headers': None, 'schema': DefinitionsAnswersuccess}},
     ('tests_id_statistics', 'GET'): {200: {'headers': None, 'schema': DefinitionsTestingstatistics}},
     ('qc_cos_config', 'GET'): {200: {'headers': None, 'schema': DefinitionsQcosconfig}},
 }
@@ -78,18 +78,18 @@ filters = {
 scopes = {
     ('self_tests', 'GET'): ['open'],
     ('self_tests', 'POST'): ['open'],
-    ('tests_id_questions', 'GET'): ['open'],
-    ('tests_id_score', 'GET'): ['open'],
-    ('self_testings', 'GET'): ['open'],
-    ('tests_id_answers', 'POST'): ['open'],
+    ('self_tests_id', 'GET'): ['open'],
+    ('self_tests_id', 'PUT'): ['open'],
+    ('self_tests_id', 'DELETE'): ['open'],
     ('self_tests_id_questions', 'GET'): ['open'],
     ('self_tests_id_questions', 'POST'): ['open'],
-    ('tests_id', 'GET'): ['open'],
     ('self_tests_test_id_questions_id', 'PUT'): ['open'],
+    ('self_testings', 'GET'): ['open'],
     ('tests_handpick', 'GET'): ['open'],
-    ('self_tests_id', 'GET'): ['open'],
-    ('self_tests_id', 'DELETE'): ['open'],
-    ('self_tests_id', 'PUT'): ['open'],
+    ('tests_id', 'GET'): ['open'],
+    ('tests_id_questions', 'GET'): ['open'],
+    ('tests_id_score', 'GET'): ['open'],
+    ('tests_id_answers', 'POST'): ['open'],
     ('tests_id_statistics', 'GET'): ['open'],
     ('qc_cos_config', 'GET'): ['open'],
 }
@@ -215,6 +215,7 @@ def normalize(schema, data, required_defaults=None):
                     result[key] = required_defaults[type_]
                 else:
                     errors.append(dict(name='property_missing',
+                                       field=key,
                                        message='`%s` is required' % key))
 
         additional_properties_schema = schema.get('additionalProperties', False)
