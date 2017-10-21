@@ -1,3 +1,14 @@
-jsonschema
 six
+jsonschema
 git+https://github.com/gusibi/cos-python-sdk-v4.git@master
+python-weixin
+sanic
+xmltodict
+pyyaml
+pycrypto
+swagger-py-codegen
+PyJWT
+mongoengine
+py-bcrypt
+arrow
+werkzeug
