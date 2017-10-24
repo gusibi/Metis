@@ -111,11 +111,6 @@ definitions:
                 $ref: '#/definitions/datetime'
             end_time:
                 $ref: '#/definitions/datetime'
-            status:
-                type: string
-                enum:
-                    - published
-                    - withdraw
     Test:
         required:
             - id
@@ -472,7 +467,7 @@ paths:
                 - OAuth2: [open]
         put:
             summary: 修改测试
-            description: 修改测试（发布|撤销）
+            description: 修改测试（不可修改测试状态）
             tags: [SELF]
             operationId: update_test
             parameters:
@@ -486,7 +481,7 @@ paths:
             responses:
                 200:
                     schema:
-                        $ref: '#/definitions/Test'
+                        $ref: '#/definitions/TestDetail'
                 default:
                     description: Unexpected error
                     schema:
@@ -505,6 +500,43 @@ paths:
                 204:
                     schema:
                         $ref: '#/definitions/Success'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+    /self/tests/{id}/publish:
+        put:
+            summary: 发布测试
+            description: 发布测试，必须有问题才可以发布
+            tags: [SELF]
+            operationId: publish_test
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/id_in_path'
+            responses:
+                200:
+                    schema:
+                        $ref: '#/definitions/TestDetail'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
+        delete:
+            summary: 取消测试发布
+            description: 取消测试发布
+            tags: [SELF]
+            operationId: delete_test
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+                - $ref: '#/parameters/id_in_path'
+            responses:
+                204:
+                    schema:
+                        $ref: '#/definitions/TestDetail'
                 default:
                     description: Unexpected error
                     schema:
@@ -603,10 +635,30 @@ paths:
                         $ref: '#/definitions/Error'
             security:
                 - OAuth2: [open]
+    /tests/banner:
+        get:
+            summary: 首页banner
+            description: 首页banner 使用 banner 字段筛选
+            tags: [TESTS]
+            operationId: get_test_banner
+            parameters:
+                - $ref: '#/parameters/AccessToken'
+            responses:
+                200:
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/definitions/Test'
+                default:
+                    description: Unexpected error
+                    schema:
+                        $ref: '#/definitions/Error'
+            security:
+                - OAuth2: [open]
     /tests/handpick:
         get:
             summary: 首页测试列表
-            description: 首页测试列表
+            description: 首页测试列表 加 handpick 字段筛选
             tags: [TESTS]
             operationId: get_test_handpick
             parameters:

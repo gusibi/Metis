@@ -7,7 +7,8 @@ from weixin.helper import smart_str
 from mongoengine import EmbeddedDocument, Document
 from mongoengine.fields import (StringField, DateTimeField,
                                 ObjectIdField, DictField, IntField,
-                                ListField, ReferenceField)
+                                ListField, ReferenceField,
+                                BooleanField)
 
 from apis.helpers import split_datetime
 
@@ -64,9 +65,16 @@ class Test(Document):
     :param remark: 备注
     :param start_time: 开始时间
     :param end_time: 结束时间
+    :param order_score: 排序值
     :param status: 状态(草稿|发布|下线)
+    :param is_sticky: 置顶(首页 banner)
+    :param is_digest: 精华(首页精选)
     :param created_time: 创建时间
     '''
+
+    STATUS_DRAFT = 'draft'
+    STATUS_PUBLISHED = 'published'
+    STATUS_WITHDRAW = 'withdraw'
 
     def __getattribute__(self, name):
         if name == 'id':
@@ -86,6 +94,9 @@ class Test(Document):
     participate_number = IntField(required=True, default=0)
     start_time = DateTimeField()
     end_time = DateTimeField()
+    is_sticky = BooleanField()
+    is_digest = BooleanField()
+    order_score = IntField()
     created_time = DateTimeField(default=datetime.utcnow())
     updated_time = DateTimeField()
     # questions = ReferenceField('Question')
@@ -96,6 +107,8 @@ class Test(Document):
             'title',
             '$title',  # text index
             ('creator_id', 'status', '-created_time'),
+            ('is_sticky', 'status', '-order_score'),
+            ('is_digest', 'status', '-order_score'),
             ('status', '-participate_number')
         ]
     }

@@ -29,7 +29,7 @@ class TestsIdAnswers(Resource):
 
     async def post(self, request, id):
         test = Test.objects(id=id).first()
-        if not test or test.status != 'published':
+        if not test or test.status != Test.STATUS_PUBLISHED:
             raise NotFound('test_not_found')
         question_id = request.json['question_id']
         options = request.json['options']

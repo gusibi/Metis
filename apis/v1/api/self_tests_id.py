@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from bson.objectid import ObjectId
 
 from apis.models.test import Test
@@ -36,7 +35,7 @@ class SelfTestsId(Resource):
 
     async def delete(self, request, id):
         test = self._get_test(id)
-        if test.status == 'published':
+        if test.status == Test.STATUS_PUBLISHED:
             raise BadRequest('invalid_status')
         test.delete()
         return {}, 204
