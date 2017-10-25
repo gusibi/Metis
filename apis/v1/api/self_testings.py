@@ -1,15 +1,23 @@
 # -*- coding: utf-8 -*-
 
-from sanic.response import text
+from apis.helpers import get_offset_limit
+from apis.models.test import Answer, Test
+from apis.verification import current_account
 
 from . import Resource
-from .. import schemas
 
 
 class SelfTestings(Resource):
 
     async def get(self, request):
-        print(request.headers)
-        print(request.args)
-
-        return [], 200, None
+        filter = {'account_id': current_account.id}
+        status = request.args.get('status')
+        if status:
+            filter['status'] = status
+        offset, limit = get_offset_limit(request.raw_args)
+        answers = (Answer.objects(**filter)
+                   .order_by('-update_time')
+                   .skip(offset).limit(limit))
+        test_ids = [a.test_id for a in answers]
+        tests = Test.objects(id__in=test_ids).all()
+        return tests, 200

@@ -156,18 +156,29 @@ class Answer(Document):
     :param id: 答案ID
     :param account_id: 用户ID
     :param test_id: 测试 id
+    :param score: 分数
+    :param status: 测试状态(pending|finished)
     :param created_time: 开始答题时间
     :param updated_time: 最后答题时间
     :param answers: 答案 {question_id: [options]}
     '''
 
-    meta = {"collection_name": 'answer'}
+    STATUS_FINISHED = 'finished'
+    STATUS_PENDING = 'pending'
 
     id = ObjectIdField(primary_key=True)
     test_id = StringField(required=True)
     account_id = StringField(required=True)
-    score = IntField()
+    score = IntField(default=0)
     answers = DictField(default={})
-    status = StringField(required=True, default='pendding')
+    status = StringField(required=True, default=STATUS_PENDING)
     created_time = DateTimeField(default=datetime.utcnow())
     updated_time = DateTimeField()
+
+    meta = {
+        "collection_name": 'answer',
+        'indexes': [
+            ('account_id', 'status', '-score'),
+            ('account_id', 'status', '-updated_time'),
+        ]
+    }

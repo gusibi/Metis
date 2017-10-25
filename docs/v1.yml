@@ -51,7 +51,6 @@ definitions:
     Testing:
         required:
             - id
-            - score
             - title
             - description
         properties:

@@ -53,7 +53,7 @@ class TestsIdAnswers(Resource):
         if question.number == test.question_count - 1:
             last = True
             score = self.calculate_score(test, answer.answers)
-            answer.update(score=score, status='finished')
+            answer.update(score=score, status=Answer.STATUS_FINISHED)
             # 统计分数
         else:
             last = False

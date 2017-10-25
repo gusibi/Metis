@@ -17,5 +17,8 @@ class TestsIdQuestions(Resource):
 
     async def get(self, request, id):
         test = self._get_test(id)
-        questions = Question.objects(test_id=test.id).order_by('number').all()
+        questions = (Question
+                     .objects(test_id=test.id)
+                     .order_by('number')
+                     .all())
         return questions, 200
