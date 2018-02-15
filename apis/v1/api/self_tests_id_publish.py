@@ -19,11 +19,11 @@ class SelfTestsIdPublish(Resource):
         test = self._get_test(id)
         if not test.question_count:
             raise BadRequest('no_questions')
-        test.update(status=Test.STATUS_PUBLISH)
+        test.update(status=Test.STATUS_PUBLISHED)
         return test, 200
 
     async def delete(self, request, id):
         test = self._get_test(id)
-        if test.status == Test.STATUS_PUBLISH:
+        if test.status == Test.STATUS_PUBLISHED:
             test.update(status=Test.STATUS_WITHDRAW)
         return {}, 204

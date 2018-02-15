@@ -13,8 +13,10 @@ class SelfTests(Resource):
     async def get(self, request):
         filter = {'creator_id': current_account.id}
         status = request.args.get('status')
-        if status:
+        if status and status == 'published':
             filter['status'] = status
+        elif status and status == 'draft':
+            filter['status__in'] = [status, 'withdraw']
         offset, limit = get_offset_limit(request.raw_args)
         tests = Test.objects(**filter).skip(offset).limit(limit).all()
         return tests, 200

@@ -535,7 +535,7 @@ paths:
             responses:
                 204:
                     schema:
-                        $ref: '#/definitions/TestDetail'
+                        $ref: '#/definitions/Success'
                 default:
                     description: Unexpected error
                     schema:

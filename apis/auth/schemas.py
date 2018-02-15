@@ -12,57 +12,57 @@
 base_path = '/auth'
 
 
-DefinitionsError = {'properties': {'error_code': {'type': 'integer', 'format': 'int32'}, 'message': {'type': 'string'}, 'text': {'type': 'string'}}}
-DefinitionsSuccess = {'properties': {'ok': {'type': 'boolean'}}}
-DefinitionsAuthentications = {'description': '用户详细授权数据', 'properties': {'wxapp': {'type': 'string'}, 'mobile': {'type': 'string'}}}
-DefinitionsNone = {'type': 'object'}
-DefinitionsOauthbind = {'description': '绑定登录后绑定第三方帐号', 'required': ['auth_approach', 'identity', 'password'], 'properties': {'auth_approach': {'type': 'string', 'default': 'mobile', 'enum': ['weibo', 'weixin', 'wxapp'], 'description': '绑定第三方帐号 微信 微信公众号 微信小程序'}, 'password': {'type': 'string', 'description': '微博token/微信token'}, 'identity': {'type': 'string', 'description': 'weibo/weixin uid'}}}
-DefinitionsRefreshtoken = {'required': ['refresh_token', 'grant_type'], 'properties': {'refresh_token': {'type': 'string'}, 'grant_type': {'type': 'string', 'default': 'refresh_token', 'enum': ['refresh_token']}}}
-DefinitionsResetpassword = {'properties': {'mobile': {'type': 'string'}, 'old_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}, 'new_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
-DefinitionsTokencode = {'required': ['code', 'grant_type'], 'properties': {'code': {'type': 'string'}, 'grant_type': {'type': 'string', 'default': 'token_code', 'enum': ['token_code']}}}
-DefinitionsAuth_approach = {'properties': {'auth_approach': {'type': 'string', 'default': 'mobile', 'enum': ['mobile', 'wxapp', 'weixin', 'weixin_mp'], 'description': '登录方式 手机 微信 微信小程序'}}}
-DefinitionsScopes = {'required': ['scopes'], 'properties': {'scopes': {'type': 'array', 'items': {'type': 'string'}, 'description': 'token 类型'}}}
-DefinitionsAccount = {'description': 'account 基本信息', 'required': ['id'], 'properties': {'id': {'type': 'string'}, 'date_created': {'format': 'datetime', 'type': 'string'}}}
-DefinitionsToken = {'description': 'token', 'properties': {'access_token': {'type': 'string'}}}
-DefinitionsApproach = {'required': ['approach'], 'properties': {'approach': {'type': 'string'}, 'identity': {'type': 'string'}, 'is_verified': {'type': 'boolean'}}}
 DefinitionsPassword = {'required': ['password'], 'properties': {'password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
+DefinitionsOauthbind = {'required': ['auth_approach', 'identity', 'password'], 'description': '绑定登录后绑定第三方帐号', 'properties': {'auth_approach': {'enum': ['weibo', 'weixin', 'wxapp'], 'type': 'string', 'default': 'mobile', 'description': '绑定第三方帐号 微信 微信公众号 微信小程序'}, 'password': {'type': 'string', 'description': '微博token/微信token'}, 'identity': {'type': 'string', 'description': 'weibo/weixin uid'}}}
+DefinitionsError = {'properties': {'text': {'type': 'string'}, 'error_code': {'format': 'int32', 'type': 'integer'}, 'message': {'type': 'string'}}}
+DefinitionsApproach = {'required': ['approach'], 'properties': {'approach': {'type': 'string'}, 'is_verified': {'type': 'boolean'}, 'identity': {'type': 'string'}}}
 DefinitionsCreatewxappaccount = {'required': ['username', 'password', 'code'], 'properties': {'code': {'type': 'string'}, 'username': {'type': 'string'}, 'password': {'type': 'string'}}}
-DefinitionsTokendetail = {'description': '返回的token信息', 'required': ['account_id', 'access_token', 'token_type'], 'properties': {'account_id': {'type': 'string', 'format': 'int32'}, 'access_token': {'type': 'string'}, 'token_type': {'type': 'string', 'default': 'jwt'}}}
+DefinitionsScopes = {'required': ['scopes'], 'properties': {'scopes': {'items': {'type': 'string'}, 'type': 'array', 'description': 'token 类型'}}}
+DefinitionsResetpassword = {'properties': {'old_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}, 'mobile': {'type': 'string'}, 'new_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
+DefinitionsToken = {'description': 'token', 'properties': {'access_token': {'type': 'string'}}}
 DefinitionsUpdatepassword = {'properties': {'new_password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}, 'password': {'maxLength': 128, 'minLength': 6, 'type': 'string'}}}
-DefinitionsAccountdetail = {'description': 'account 信息', 'required': ['id'], 'properties': {'id': {'type': 'string'}, 'username': {'type': 'string'}, 'nickname': {'type': 'string'}, 'avatar': {'type': 'string'}, 'authentications': DefinitionsAuthentications, 'created_time': {'format': 'datetime', 'type': 'string'}}}
-DefinitionsAuthentication = {'type': 'object', 'description': '获取token 登录 使用', 'required': ['username', 'password'], 'optional': ['grant_type', 'auth_approach'], 'allOf': [DefinitionsAuth_approach, {'type': 'object'}], 'properties': {'username': {'type': 'string', 'description': '手机号//微信open_id/email'}, 'password': {'type': 'string', 'description': '密码/微信token'}, 'grant_type': {'type': 'string', 'default': 'password', 'enum': ['password'], 'description': '认证类型 默认密码'}}}
+DefinitionsTokendetail = {'required': ['account_id', 'access_token', 'token_type'], 'description': '返回的token信息', 'properties': {'account_id': {'type': 'string'}, 'nickname': {'type': 'string'}, 'token_type': {'type': 'string', 'default': 'jwt'}, 'access_token': {'type': 'string'}}}
+DefinitionsAccount = {'required': ['id'], 'description': 'account 基本信息', 'properties': {'date_created': {'format': 'datetime', 'type': 'string'}, 'id': {'type': 'string'}}}
+DefinitionsSuccess = {'properties': {'ok': {'type': 'boolean'}}}
+DefinitionsTokencode = {'required': ['code', 'grant_type'], 'properties': {'code': {'type': 'string'}, 'grant_type': {'enum': ['token_code'], 'type': 'string', 'default': 'token_code'}}}
+DefinitionsNone = {'type': 'object'}
+DefinitionsAuth_approach = {'properties': {'auth_approach': {'enum': ['mobile', 'wxapp', 'weixin', 'weixin_mp'], 'type': 'string', 'default': 'mobile', 'description': '登录方式 手机 微信 微信小程序'}}}
+DefinitionsRefreshtoken = {'required': ['refresh_token', 'grant_type'], 'properties': {'refresh_token': {'type': 'string'}, 'grant_type': {'enum': ['refresh_token'], 'type': 'string', 'default': 'refresh_token'}}}
+DefinitionsAuthentications = {'description': '用户详细授权数据', 'properties': {'wxapp': {'type': 'string'}, 'mobile': {'type': 'string'}}}
+DefinitionsAuthentication = {'required': ['username', 'password'], 'allOf': [DefinitionsAuth_approach, {'type': 'object'}], 'properties': {'username': {'type': 'string', 'description': '手机号//微信open_id/email'}, 'password': {'type': 'string', 'description': '密码/微信token'}, 'grant_type': {'enum': ['password'], 'type': 'string', 'default': 'password', 'description': '认证类型 默认密码'}}, 'optional': ['grant_type', 'auth_approach'], 'type': 'object', 'description': '获取token 登录 使用'}
+DefinitionsAccountdetail = {'required': ['id'], 'description': 'account 信息', 'properties': {'authentications': DefinitionsAuthentications, 'avatar': {'type': 'string'}, 'nickname': {'type': 'string'}, 'username': {'type': 'string'}, 'created_time': {'format': 'datetime', 'type': 'string'}, 'id': {'type': 'string'}}}
 
 validators = {
-    ('oauth_token', 'POST'): {'json': DefinitionsAuthentication, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'description': '格式 (Basic hashkey) 注 hashkey为client_id + client_secret 做BASE64处理', 'type': 'string'}}}, 'args': {'required': [], 'properties': {'code': {'description': 'code', 'required': False, 'type': 'string'}}}},
-    ('oauth_token_refresh', 'POST'): {'json': DefinitionsRefreshtoken, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'description': '格式 (Basic hashkey) 注 hashkey为client_id + client_secret 做BASE64处理', 'type': 'string'}}}},
-    ('oauth_token_code', 'POST'): {'json': DefinitionsTokencode, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'description': '格式 (Basic hashkey) 注 hashkey为client_id + client_secret 做BASE64处理', 'type': 'string'}}}},
-    ('accounts_wxapp', 'POST'): {'json': DefinitionsCreatewxappaccount, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
+    ('oauth_token_code', 'POST'): {'json': DefinitionsTokencode, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string', 'description': '格式 (Basic hashkey) 注 hashkey为client_id + client_secret 做BASE64处理'}}}},
     ('accounts_self', 'GET'): {'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
+    ('oauth_token', 'POST'): {'json': DefinitionsAuthentication, 'args': {'required': [], 'properties': {'code': {'required': False, 'type': 'string', 'description': 'code'}}}, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string', 'description': '格式 (Basic hashkey) 注 hashkey为client_id + client_secret 做BASE64处理'}}}},
+    ('self_password_reset', 'POST'): {'json': DefinitionsResetpassword, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string', 'description': '格式 (Basic hashkey) 注 hashkey为client_id + client_secret 做BASE64处理'}}}},
     ('self_password', 'POST'): {'json': DefinitionsPassword, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
     ('self_password', 'PUT'): {'json': DefinitionsUpdatepassword, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
-    ('self_password_reset', 'POST'): {'json': DefinitionsResetpassword, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'description': '格式 (Basic hashkey) 注 hashkey为client_id + client_secret 做BASE64处理', 'type': 'string'}}}},
+    ('oauth_token_refresh', 'POST'): {'json': DefinitionsRefreshtoken, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string', 'description': '格式 (Basic hashkey) 注 hashkey为client_id + client_secret 做BASE64处理'}}}},
+    ('accounts_wxapp', 'POST'): {'json': DefinitionsCreatewxappaccount, 'headers': {'required': ['Authorization'], 'properties': {'Authorization': {'type': 'string'}}}},
 }
 
 filters = {
-    ('oauth_token', 'POST'): {201: {'headers': None, 'schema': DefinitionsTokendetail}},
-    ('oauth_token_refresh', 'POST'): {200: {'headers': None, 'schema': DefinitionsTokendetail}},
-    ('oauth_token_code', 'POST'): {200: {'headers': None, 'schema': DefinitionsTokendetail}},
-    ('accounts_wxapp', 'POST'): {201: {'headers': None, 'schema': DefinitionsAccount}},
-    ('accounts_self', 'GET'): {200: {'headers': None, 'schema': DefinitionsAccountdetail}},
-    ('self_password', 'POST'): {201: {'headers': None, 'schema': DefinitionsPassword}},
-    ('self_password', 'PUT'): {200: {'headers': None, 'schema': DefinitionsSuccess}},
-    ('self_password_reset', 'POST'): {200: {'headers': None, 'schema': DefinitionsSuccess}},
+    ('oauth_token_code', 'POST'): {200: {'schema': DefinitionsTokendetail, 'headers': None}},
+    ('accounts_self', 'GET'): {200: {'schema': DefinitionsAccountdetail, 'headers': None}},
+    ('oauth_token', 'POST'): {201: {'schema': DefinitionsTokendetail, 'headers': None}},
+    ('self_password_reset', 'POST'): {200: {'schema': DefinitionsSuccess, 'headers': None}},
+    ('self_password', 'POST'): {201: {'schema': DefinitionsPassword, 'headers': None}},
+    ('self_password', 'PUT'): {200: {'schema': DefinitionsSuccess, 'headers': None}},
+    ('oauth_token_refresh', 'POST'): {200: {'schema': DefinitionsTokendetail, 'headers': None}},
+    ('accounts_wxapp', 'POST'): {201: {'schema': DefinitionsAccount, 'headers': None}},
 }
 
 scopes = {
-    ('oauth_token', 'POST'): ['login', 'register'],
-    ('oauth_token_refresh', 'POST'): ['login'],
     ('oauth_token_code', 'POST'): ['login'],
-    ('accounts_wxapp', 'POST'): ['login'],
     ('accounts_self', 'GET'): ['open'],
+    ('oauth_token', 'POST'): ['login', 'register'],
+    ('self_password_reset', 'POST'): ['login'],
     ('self_password', 'POST'): ['open'],
     ('self_password', 'PUT'): ['open'],
-    ('self_password_reset', 'POST'): ['login'],
+    ('oauth_token_refresh', 'POST'): ['login'],
+    ('accounts_wxapp', 'POST'): ['login'],
 }
 
 
@@ -186,7 +186,6 @@ def normalize(schema, data, required_defaults=None):
                     result[key] = required_defaults[type_]
                 else:
                     errors.append(dict(name='property_missing',
-                                       field=key,
                                        message='`%s` is required' % key))
 
         additional_properties_schema = schema.get('additionalProperties', False)

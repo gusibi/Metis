@@ -60,9 +60,10 @@ definitions:
             - access_token
             - token_type
         properties:
+            nickname:
+                type: string
             account_id:
                 type: string
-                format: int32
             access_token:
                 type: string
             token_type:

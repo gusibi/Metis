@@ -11,6 +11,7 @@ from mongoengine.fields import (StringField, DateTimeField,
                                 BooleanField)
 
 from apis.helpers import split_datetime
+from apis.models.oauth import Account
 
 
 class Question(Document):
@@ -115,7 +116,8 @@ class Test(Document):
 
     @property
     def creator(self):
-        return {"id": self.creator_id}
+        account = Account.objects(id=self.creator_id).first()
+        return account
 
     def get_start_time_value(self):
         if self.start_time:

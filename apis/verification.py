@@ -101,11 +101,12 @@ def create_token(request):
         "exp": int(time.time()) + 86400 * 7,
         "aud": Config.AUDIENCE,
         "sub": str(account.id),
-        "nickname": account['nickname'],
+        "nickname": account.nickname,
         "scopes": ['open']
     }
     token = jwt.encode(payload, 'secret', algorithm='HS256')
     return True, {'access_token': token,
+                  'nickname': account.nickname,
                   'account_id': str(account.id)}
 
 
